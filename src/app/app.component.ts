@@ -2,13 +2,6 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 
 
 
-export class Tab {
-    title: string;
-    active: boolean;
-    content: string;
-
-}
-
 const profileCss = `\
 body {
   background-image: url(https://www.bienenfisch-design.com/wp-content/uploads/wpsg_produktbilder/6410/tn/s-800-600-feine-pergament-textur-003.jpg);
@@ -89,37 +82,20 @@ body {
     template: `
         <h1>{{title}}</h1>
         <div class='tabscontainer'>
-            <label *ngFor="let tab of tabs"
-              [class.active]="tab === activeTab"
-              class="tabtitle"
-              id="tabtitle_{{tab.id}}"
-              for="tab_{{tab.id}}"
-              (click)="activate(tab)">
-                {{tab.title}}
-            </label>
-            <label class='tabtitle' id='addtab-button' (click)="addNewTab()">
-              +
-            </label>
-            <div *ngIf="activeTab" class='editorcontainer'>
-                <textarea *ngIf="editmode=='source'" [(ngModel)]="activeTab.content" class='editor' width='300' height='20'>
-                </textarea>
-            </div>
+            <tabs></tabs>
         </div>
         <input type='submit' (click)="export()" value="Profil exportieren" />
         <div>
         <iframe
           [class.hidden]="!showExport"
           id='result'
-          style='width:600px;'
+          style='width:600px; float: right;'
           #result>
         </iframe>
-        <pre *ngIf="showExport" style='float: left;'>{{profileSrc}}</pre>
+        <pre *ngIf="showExport">{{profileSrc}}</pre>
         </div>
         `,
     styles: [`
-        .active {
-            color: red;
-        }
         .hidden {
           display: none;
         }
@@ -132,30 +108,9 @@ export class AppComponent {
     editmode = 'source';
     showExport = false;
 
-    tabs = [];
-    activeTab: Tab;
     profileSrc: string;
 
-    add(tab: Tab): void {
-        this.tabs.push(tab);
-        if(!this.activeTab) {
-            this.activate(this.tabs[this.tabs.length - 1]);
-        }
-    }
-
-    activate(tab: Tab): void {
-      if(this.activeTab === tab)
-      {
-        tab.title = prompt(
-          "Gebe einen neuen Titel f&uuml;r den Tab ein:",
-          tab.title);
-      }
-      else {
-        this.activeTab = tab;
-      }
-    }
-
-    export(): void {
+    /*export(): void {
       let profileSrc = "<div id='noeditmode'>"
                      + "\n<div class='contentcontainer'>";
       this.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
@@ -167,8 +122,7 @@ export class AppComponent {
                     + (i === 1 ? " checked='checked'" : "")
                     + " name='tabs' />";
         profileSrc += "\n<div class='tabcontent'>";
-        profileSrc += "\n" + tab.content;/*.replace('<', '&lt;')
-                      .replace('>', '&gt;');*/
+        profileSrc += "\n" + tab.content;
         profileSrc += "\n</div>";
       });
       profileSrc += "\n</div>\n</div>";
@@ -183,14 +137,7 @@ export class AppComponent {
       iframe.contentWindow.document.write("<body>" + this.profileSrc + "</body>");
       iframe.contentWindow.document.close();
 
-    }
-
-    addNewTab(): void {
-      this.add({
-        title: 'Tab' + (this.tabs.length + 1),
-        active: false, content: ''
-      });
-    }
+    }*/
 
     ngOnInit(): void {
     }
