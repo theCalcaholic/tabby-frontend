@@ -12,8 +12,13 @@ import { Tab } from './tab.component';
           width='300'
           height='20'>
         </textarea>
-				<div *ngIf="editmode=='cke'" id="editor">
-				</div>
+				<ckeditor
+          *ngIf="editmode=='cke'"
+          [(ngModel)]="tab.content"
+          debounce="500"
+          [config]="{contentsCss: './assets/tabstyle.css'}"
+        >
+        </ckeditor>
       </div>
     `,
     styles: [``]
@@ -21,5 +26,8 @@ import { Tab } from './tab.component';
 
 export class EditorComponent {
   @Input() tab: Tab;
-  editmode = 'source';
+  @Input() tabStyles : string;
+  editmode = 'cke';
+
+
 }

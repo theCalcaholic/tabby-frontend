@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import {TabComponent } from './tab.component';
 import { EditorComponent } from './editor.component';
+import { CKEditorModule } from 'ng2-ckeditor';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { EditorComponent } from './editor.component';
   ],
   imports: [
       BrowserModule,
-      FormsModule
+      FormsModule,
+      CKEditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
