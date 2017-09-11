@@ -1,3 +1,11 @@
 .hidden {
   display: none;
 }
+#previewContainer {
+  margin-top: 40px;
+  text-align: center;
+  background-color: black;
+}
+#preview {
+  margin: 40px;
+}

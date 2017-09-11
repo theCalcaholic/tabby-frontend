@@ -1,10 +1,32 @@
-import { Component } from '@angular/core';
+import { SimpleChanges, Input, Component } from '@angular/core';
 
 
 export class Tab {
-    title: string;
-    active: boolean;
-    content: string;
+    private _title: string;
+    private _content: string;
+    get title(): string {
+      return this._title;
+    };
+    set title(theTitle: string) {
+      this._title = theTitle;
+      this.OnChange();
+    }
+    get content(): string {
+      return this._content;
+    }
+    set content(theContent: string) {
+      this._content = theContent;
+      this.OnChange();
+    }
+    active: false;
+
+    constructor(title: string, onChange?: Function) {
+      this._title = title;
+      this._content = '';
+      this.OnChange = onChange || (()=>{});
+    }
+
+    OnChange: Function;
 
 }
 
@@ -37,12 +59,14 @@ export class Tab {
 
 
 export class TabComponent {
+    @Input() renderPreview: Function;
     tabs = [];
     activeTab: Tab;
 
     add(tab: Tab): void {
         this.tabs.push(tab);
         this.activate(this.tabs[this.tabs.length - 1]);
+        this.export();
     }
 
     activate(tab: Tab): void {
@@ -62,14 +86,36 @@ export class TabComponent {
     }
 
     addNewTab(): void {
-      this.add({
-        title: 'Tab' + (this.tabs.length + 1),
-        active: false, content: ''
-      });
+      this.add(new Tab('Tab' + (this.tabs.length + 1), this.export.bind(this)));
     }
+
+    export(): void {
+      console.log(this.tabs);
+      let profileSrc = "<div id='noeditmode'>"
+                     + "\n<div class='contentcontainer'>";
+      this.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
+        profileSrc += "\n<label class='tabtitle' for='tab" + i + "'>"
+                    + tab.title + "</label>";
+      });
+      this.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
+        profileSrc += "\n<input type='radio' id='tab" + i + "' class='tab'"
+                    + (tab == this.activeTab ? " checked='checked'" : "")
+                    + " name='tabs'>";
+        profileSrc += "\n<div class='tabcontent'>";
+        profileSrc += "\n" + tab.content;
+        profileSrc += "\n</div>";
+      });
+      profileSrc += "\n</div>\n</div>";
+      profileSrc += "\n<style type='text/css'>"
+                  + "\n" + profileCss
+                  + "\n</style>";
+      console.log(profileSrc);
+      this.renderPreview(profileSrc);
+    }
+
 }
 
-const parofileCss = `\
+const profileCss = `\
 body {
   background-image: url(https://www.bienenfisch-design.com/wp-content/uploads/wpsg_produktbilder/6410/tn/s-800-600-feine-pergament-textur-003.jpg);
   background-repeat: no-repeat;

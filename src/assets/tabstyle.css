@@ -2,6 +2,7 @@ body {
   background-image: url(https://www.bienenfisch-design.com/wp-content/uploads/wpsg_produktbilder/6410/tn/s-800-600-feine-pergament-textur-003.jpg);
   background-repeat: no-repeat;
   background-size: cover;
+  min-height: 400px;
 }
 .tab {
   visibility: hidden;
@@ -9,6 +10,7 @@ body {
   border-color: red;
   border-width: 1px;
   border-style: solid;
+  min-height: 400px;
 }
 .tab + div {
   display: none;
