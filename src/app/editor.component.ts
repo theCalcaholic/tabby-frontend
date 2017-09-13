@@ -1,33 +1,27 @@
-import {Component, Input} from '@angular/core';
-import { Tab } from './tab.component';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+
+import {TabComponent } from './tab.component';
+import { ProfileService }  from './profile.service';
 
 @Component({
-    selector: 'editor',
-    template: `
-      <div class="editorcontainer">
-        <textarea
-          *ngIf="editmode=='source'"
-          [(ngModel)]="tab.content"
-          class='editor'
-          width='300'
-          height='20'>
-        </textarea>
-				<ckeditor
-          *ngIf="editmode=='cke'"
-          [(ngModel)]="tab.content"
-          debounce="500"
-          [config]="{contentsCss: './assets/tabstyle.css'}"
-        >
-        </ckeditor>
-      </div>
-    `,
-    styles: [``]
+    selector: 'editor-root',
+    templateUrl: './editor.component.html',
+    styleUrls: ['./editor.component.css'],
 })
 
 export class EditorComponent {
-  @Input() tab: Tab;
-  @Input() tabStyles : string;
-  editmode = 'cke';
+    @ViewChild('preview') resultContainer: ElementRef;
+    title = 'Tabby';
+    showExport = false;
+    profileSrc: string;
 
-
+    renderPreview(src: string): void {
+      this.showExport = true;
+      this.profileSrc = src;
+      let iframe: HTMLIFrameElement
+      = <HTMLIFrameElement> this.resultContainer.nativeElement;
+      iframe.contentWindow.document.open();
+      iframe.contentWindow.document.write("<body>" + src + "</body>");
+      iframe.contentWindow.document.close();
+    }
 }

@@ -1,71 +1,38 @@
-import { SimpleChanges, Input, Component } from '@angular/core';
-
-
-export class Tab {
-    private _title: string;
-    private _content: string;
-    get title(): string {
-      return this._title;
-    };
-    set title(theTitle: string) {
-      this._title = theTitle;
-      this.OnChange();
-    }
-    get content(): string {
-      return this._content;
-    }
-    set content(theContent: string) {
-      this._content = theContent;
-      this.OnChange();
-    }
-    active: false;
-
-    constructor(title: string, onChange?: Function) {
-      this._title = title;
-      this._content = '';
-      this.OnChange = onChange || (()=>{});
-    }
-
-    OnChange: Function;
-
-}
+import { OnInit, SimpleChanges, Input, Component } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Location } from '@angular/common';
+import 'rxjs/add/operator/switchMap';
+import { ProfileService } from './profile.service';
+import { Tab } from './tab';
+import { Profile } from './profile';
 
 @Component({
   selector: 'tabs',
-  template: `<label *ngFor="let tab of tabs"
-    [class.active]="tab === activeTab"
-    class="tabtitle"
-    id="tabtitle_{{tab.id}}"
-    for="tab_{{tab.id}}"
-    (click)="activate(tab)">
-      {{tab.title}}
-  </label>
-  <label class='tabtitle' id='addtab-button' (click)="addNewTab()">
-    +
-  </label>
-  <div *ngIf="activeTab" class='editorcontainer'>
-      <!--<textarea *ngIf="editmode=='source'" [(ngModel)]="activeTab.content" class='editor' width='300' height='20'>
-      </textarea>-->
-      <editor [tab]="activeTab" [tabStyles]="style">
-      </editor>
-  </div>`,
-  styles: [`
-      .active {
+  templateUrl: 'tab.component.html',
+  styles: [`.active {
           color: red;
-      }
-      `]
+      }`],
+  providers: [ProfileService]
 
 })
-
-
-export class TabComponent {
+export class TabComponent  implements OnInit {
     @Input() renderPreview: Function;
-    tabs = [];
     activeTab: Tab;
+    profile: Profile;
+    tabs: Tab[];
+    private tabComponent: this;
+
+    constructor(
+      private profileService: ProfileService,
+      private route: ActivatedRoute,
+      private location: Location
+    ) {
+      this.profileService = profileService;
+    }
 
     add(tab: Tab): void {
-        this.tabs.push(tab);
-        this.activate(this.tabs[this.tabs.length - 1]);
+        this.profile.tabs.push(tab);
+        this.activate(this.profile.tabs[this.profile.tabs.length - 1]);
         this.export();
     }
 
@@ -86,18 +53,18 @@ export class TabComponent {
     }
 
     addNewTab(): void {
-      this.add(new Tab('Tab' + (this.tabs.length + 1), this.export.bind(this)));
+      this.add(new Tab('Tab' + (this.profile.tabs.length + 1), this.export.bind(this)));
     }
 
     export(): void {
-      console.log(this.tabs);
+      console.log(this.profile);
       let profileSrc = "<div id='noeditmode'>"
                      + "\n<div class='contentcontainer'>";
-      this.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
+      this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
         profileSrc += "\n<label class='tabtitle' for='tab" + i + "'>"
                     + tab.title + "</label>";
       });
-      this.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
+      this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
         profileSrc += "\n<input type='radio' id='tab" + i + "' class='tab'"
                     + (tab == this.activeTab ? " checked='checked'" : "")
                     + " name='tabs'>";
@@ -111,6 +78,30 @@ export class TabComponent {
                   + "\n</style>";
       console.log(profileSrc);
       this.renderPreview(profileSrc);
+    }
+
+    registerTabs(): void {
+      console.log("registering tabs");
+      if( !this.profile ) return;
+      console.log("iterating...");
+      this.profile.tabs.forEach((tab: Tab) => {
+        tab.OnChange = this.export.bind(this);
+      }, this);
+      if(this.profile.tabs.length > 0)
+        this.activate(this.profile.tabs[0]);
+      this.export();
+      /*this.profile.tabs.forEach((tab: Tab) => {
+        this.add(new Tab(tab.title, this.export.bind(this)));
+      }, this);*/
+    }
+
+    ngOnInit(): void {
+      this.route.paramMap
+        .switchMap((params: ParamMap) => this.profileService.getProfile(params.get('id')))
+        .subscribe((profile => {
+          this.profile = profile;
+          this.registerTabs();
+        }));
     }
 
 }
