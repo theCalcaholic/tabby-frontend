@@ -33,6 +33,9 @@ export class Tab {
 
     OnChange: Function;
 
+    toData(): TabData {
+      return { title: this._title, content: this._content }
+    }
 }
 
 export function tabFromData(data: TabData): Tab {

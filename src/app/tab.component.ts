@@ -95,6 +95,11 @@ export class TabComponent  implements OnInit {
       }, this);*/
     }
 
+    profileUpdated(): void {
+      this.profileService.save(this.profile.toData());
+      this.export();
+    }
+
     ngOnInit(): void {
       this.route.paramMap
         .switchMap((params: ParamMap) => this.profileService.getProfile(params.get('id')))

@@ -9,6 +9,12 @@ export class Profile {
   id: string;
   tabs: Tab[];
 
+  toData(): ProfileData {
+    let data = new ProfileData();
+    data.id = this.id;
+    data.tabs = this.tabs.map((tab) => tab.toData());
+    return data;
+  }
 }
 
 export function profileFromData(data: ProfileData): Profile {
