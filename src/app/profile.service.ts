@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http'
 import 'rxjs/add/operator/toPromise';
 
-import { profileFromData, Profile, ProfileData } from './profile';
+import { profileFromData, Profile, ProfileData } from 'tabby-common/profile';
 
 @Injectable()
 export class ProfileService {
