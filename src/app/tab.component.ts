@@ -11,8 +11,7 @@ import { Profile } from './profile';
   templateUrl: 'tab.component.html',
   styles: [`.active {
           color: red;
-      }`],
-  providers: [ProfileService]
+      }`]
 
 })
 export class TabComponent  implements OnInit {

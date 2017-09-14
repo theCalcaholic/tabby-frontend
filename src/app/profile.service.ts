@@ -6,7 +6,8 @@ import { profileFromData, Profile, ProfileData } from './profile';
 
 @Injectable()
 export class ProfileService {
-  private RESTBaseUrl = "api/profiles";
+  private RESTBaseUrl = "http://localhost:3000/profiles";
+  //private RESTBaseUrl = "/api/profiles";
   private headers = new Headers({'Content-Type': 'application/json'});
   private cache: { [id: string] : ProfileData } = {};
   private saveRequest: Promise<Profile> = Promise.resolve(null);
@@ -21,6 +22,8 @@ export class ProfileService {
     return this.http.get(url)
       .toPromise()
       .then(response => {
+        console.log("received response:");
+        console.log(response);
         let profileData = response.json().data as ProfileData;
         this.cache[profileData.id] = profileData;
         return profileFromData(profileData);

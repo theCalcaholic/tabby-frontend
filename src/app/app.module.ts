@@ -7,16 +7,12 @@ import { CKEditorModule } from 'ng2-ckeditor';
 
 import { AppRoutingModule } from './app-routing.module';
 
+import { ProfileService } from './profile.service';
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing.component';
 import {TabComponent } from './tab.component';
 import { EditorComponent } from './editor.component';
 import { CKEIntegrationComponent } from './cke-integration.component';
-
-// simulated web service
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './in-memory-data.service';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,10 +26,9 @@ import { InMemoryDataService } from './in-memory-data.service';
       FormsModule,
       AppRoutingModule,
       HttpModule,
-      InMemoryWebApiModule.forRoot(InMemoryDataService),
       CKEditorModule
   ],
-  providers: [],
+  providers: [ProfileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
