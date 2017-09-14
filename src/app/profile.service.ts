@@ -9,6 +9,7 @@ export class ProfileService {
   private RESTBaseUrl = "api/profiles";
   private headers = new Headers({'Content-Type': 'application/json'});
   private cache: { [id: string] : ProfileData } = {};
+  private saveRequest: Promise<Profile> = Promise.resolve(null);
 
   constructor( private http: Http ) { }
 
@@ -28,12 +29,8 @@ export class ProfileService {
   }
 
   save(profile: ProfileData): Promise<Profile> {
-    const url = `${this.RESTBaseUrl}/${profile.id}`;
-    return this.http
-      .put(url, JSON.stringify(profile), {headers: this.headers})
-      .toPromise()
-      .then(() => profile)
-      .catch(this.handleError);
+    console.log(`ProfileService.save(${profile.id})`);
+    return this.saveRequest.then((v) => this.updateProfile(profile));
   }
 
   new(): Promise<Profile> {
@@ -44,6 +41,20 @@ export class ProfileService {
         let profileData = response.json().data as ProfileData;
         this.cache[profileData.id] = profileData;
         return profileFromData(profileData);
+      })
+      .catch(this.handleError);
+  }
+
+  private updateProfile(profile: ProfileData): Promise<Profile> {
+    let cache = this.cache;
+    const url = `${this.RESTBaseUrl}/${profile.id}`;
+    return this.http
+      .put(url, JSON.stringify(profile), {headers: this.headers})
+      .toPromise()
+      .then((response) => {
+        if( profile.id in cache)
+          delete cache[profile.id];
+        return profile;
       })
       .catch(this.handleError);
   }

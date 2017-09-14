@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'landing',
   template: `
     <h1>Tabby</h1>
-    <a href='new'>New Profile</a>
+    <a routerLink="edit/9as9u2ob3bonal">TestProfile</a>
     <hr>
     <router-outlet></router-outlet>
     `

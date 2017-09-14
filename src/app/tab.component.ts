@@ -53,7 +53,7 @@ export class TabComponent  implements OnInit {
     }
 
     addNewTab(): void {
-      this.add(new Tab('Tab' + (this.profile.tabs.length + 1), this.export.bind(this)));
+      this.add(new Tab('Tab' + (this.profile.tabs.length + 1), this.profileUpdated.bind(this)));
     }
 
     export(): void {
@@ -76,7 +76,6 @@ export class TabComponent  implements OnInit {
       profileSrc += "\n<style type='text/css'>"
                   + "\n" + profileCss
                   + "\n</style>";
-      console.log(profileSrc);
       this.renderPreview(profileSrc);
     }
 
@@ -85,7 +84,7 @@ export class TabComponent  implements OnInit {
       if( !this.profile ) return;
       console.log("iterating...");
       this.profile.tabs.forEach((tab: Tab) => {
-        tab.OnChange = this.export.bind(this);
+        tab.OnChange = this.profileUpdated.bind(this);
       }, this);
       if(this.profile.tabs.length > 0)
         this.activate(this.profile.tabs[0]);
