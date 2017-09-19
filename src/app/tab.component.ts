@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import { ProfileService } from './profile.service';
-import { Tab } from 'tabby-common/tab';
+import { Tab, TabData, tabFromData } from 'tabby-common/tab';
 import { Profile } from 'tabby-common/profile';
 
 @Component({
@@ -52,7 +52,15 @@ export class TabComponent  implements OnInit {
     }
 
     addNewTab(): void {
-      this.add(new Tab('Tab' + (this.profile.tabs.length + 1), this.profileUpdated.bind(this)));
+      let me = this;
+      let tabdata:TabData = {title:"Tab" + (me.profile.tabs.length + 1), content:'', id:undefined};
+      this.profileService.newTab(tabdata, this.profile.id)
+        .then((newTabData:TabData) => {
+          console.log("new tab has been created");
+          let newTab = tabFromData(newTabData);
+          newTab.OnChange = me.tabUpdated.bind(me, newTab, this.profile.id);
+          me.add(newTab);
+        });
     }
 
     export(): void {
@@ -82,8 +90,9 @@ export class TabComponent  implements OnInit {
       console.log("registering tabs");
       if( !this.profile ) return;
       console.log("iterating...");
+      let me = this;
       this.profile.tabs.forEach((tab: Tab) => {
-        tab.OnChange = this.profileUpdated.bind(this);
+        tab.OnChange = me.tabUpdated.bind(me, tab, this.profile.id);
       }, this);
       if(this.profile.tabs.length > 0)
         this.activate(this.profile.tabs[0]);
@@ -96,6 +105,10 @@ export class TabComponent  implements OnInit {
     profileUpdated(): void {
       this.profileService.save(this.profile.toData());
       this.export();
+    }
+
+    tabUpdated(tab:Tab): void {
+      this.profileService.saveTab(tab.toData(), this.profile.id);
     }
 
     ngOnInit(): void {

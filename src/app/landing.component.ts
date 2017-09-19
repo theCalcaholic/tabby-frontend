@@ -21,7 +21,7 @@ export class LandingComponent {
   ) {}
 
   createNewProfile() {
-    this.profileService.new().then((profile: Profile) => {
+    this.profileService.newProfile().then((profile: Profile) => {
       this.router.navigateByUrl(`/edit/${profile.id}`);
     });
   }

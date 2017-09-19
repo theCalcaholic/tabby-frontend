@@ -3,10 +3,11 @@ import { Headers, Http } from '@angular/http'
 import 'rxjs/add/operator/toPromise';
 
 import { profileFromData, Profile, ProfileData } from 'tabby-common/profile';
+import { TabData } from 'tabby-common/tab';
 
 @Injectable()
 export class ProfileService {
-  private RESTBaseUrl = "http://localhost:3000/profiles";
+  private RESTBaseUrl = "http://localhost:3000";
   //private RESTBaseUrl = "/api/profiles";
   private headers = new Headers({'Content-Type': 'application/json'});
   private cache: { [id: string] : ProfileData } = {};
@@ -18,14 +19,14 @@ export class ProfileService {
     if(id in this.cache)
       return Promise.resolve(profileFromData(this.cache[id]));
 
-    let url = `${this.RESTBaseUrl}/${id}`;
+    let url = `${this.RESTBaseUrl}/profiles/${id}`;
     return this.http.get(url)
       .toPromise()
       .then(response => {
         console.log("received response:");
         console.log(response);
         let profileData = response.json().data as ProfileData;
-        this.cache[profileData.id] = profileData;
+        //this.cache[profileData.id] = profileData;
         return profileFromData(profileData);
       })
       .catch(this.handleError);
@@ -36,21 +37,40 @@ export class ProfileService {
     return this.saveRequest.then((v) => this.updateProfile(profile));
   }
 
-  new(): Promise<Profile> {
-    let url = `${this.RESTBaseUrl}/new`;
+  newProfile(): Promise<Profile> {
+    let url = `${this.RESTBaseUrl}/profiles/new`;
     return this.http.get(url)
       .toPromise()
       .then(response => {
+        console.log("received response:");
+        console.log(response);
         let profileData = response.json().data as ProfileData;
-        this.cache[profileData.id] = profileData;
+        //this.cache[profileData.id] = profileData;
         return profileFromData(profileData);
       })
       .catch(this.handleError);
   }
 
+  newTab(tab:TabData, profileId:string): Promise<TabData> {
+    let url = `${this.RESTBaseUrl}/tabs/new`;
+    console.log("raw data: {")
+    console.log("  tab:");
+    console.log(tab);
+    console.log(`  profileId: ${profileId}`);
+    console.log("}");
+    console.log("data to transmit:");
+    console.log(JSON.stringify({ "tab": tab, "profileId": profileId }));
+    return this.http.
+      put(url, JSON.stringify({"tab": tab, "profileId": profileId}), {headers: this.headers})
+      .toPromise()
+      .then((response) => {
+        return response.json().data as TabData
+      });
+  }
+
   private updateProfile(profile: ProfileData): Promise<Profile> {
     let cache = this.cache;
-    const url = `${this.RESTBaseUrl}/${profile.id}`;
+    const url = `${this.RESTBaseUrl}/profiles/${profile.id}`;
     return this.http
       .put(url, JSON.stringify(profile), {headers: this.headers})
       .toPromise()
@@ -60,6 +80,13 @@ export class ProfileService {
         return profile;
       })
       .catch(this.handleError);
+  }
+
+  saveTab(tab:TabData, profileId:string): Promise<any> {
+    let url = `${this.RESTBaseUrl}/tabs/${tab.id}`
+    return this.http.
+      put(url, JSON.stringify({"tab": tab, "profileId": profileId}), {headers: this.headers})
+      .toPromise();
   }
 
   private handleError(error: any): Promise<any> {
