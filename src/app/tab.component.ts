@@ -49,6 +49,7 @@ export class TabComponent  implements OnInit {
       else {
         this.activeTab = tab;
       }
+      this.export();
     }
 
     addNewTab(): void {
@@ -103,12 +104,12 @@ export class TabComponent  implements OnInit {
     }
 
     profileUpdated(): void {
-      this.profileService.save(this.profile.toData());
-      this.export();
+      this.profileService.saveProfile(this.profile.toData());
     }
 
     tabUpdated(tab:Tab): void {
       this.profileService.saveTab(tab.toData(), this.profile.id);
+      this.export();
     }
 
     ngOnInit(): void {
