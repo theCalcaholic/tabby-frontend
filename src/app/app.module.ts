@@ -8,7 +8,6 @@ import { CKEditorModule } from 'ng2-ckeditor';
 import { AppRoutingModule } from './app-routing.module';
 
 import { ProfileService } from './profile.service';
-import { ConfigService } from './config.service';
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing.component';
 import {TabComponent } from './tab.component';
@@ -32,7 +31,7 @@ import { ClipboardDirective } from './clipboard.directive';
       HttpModule,
       CKEditorModule
   ],
-  providers: [ProfileService, ConfigService],
+  providers: [ProfileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
