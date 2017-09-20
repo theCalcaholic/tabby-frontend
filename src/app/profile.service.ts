@@ -2,17 +2,21 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http'
 import 'rxjs/add/operator/toPromise';
 
+import { ConfigService } from './config.service';
 import { profileFromData, Profile, ProfileData } from 'tabby-common/profile';
 import { TabData } from 'tabby-common/tab';
 
 @Injectable()
 export class ProfileService {
-  private RESTBaseUrl = "http://localhost:3000";
+  private RESTBaseUrl:string;
   //private RESTBaseUrl = "/api/profiles";
   private headers = new Headers({'Content-Type': 'application/json'});
   private cache: { [id: string] : ProfileData } = {};
 
-  constructor( private http: Http ) { }
+  constructor( private http: Http, private config:ConfigService )
+  {
+    this.RESTBaseUrl = config.get("RESTURL");
+  }
 
   getProfile(id: string): Promise<Profile> {
     if(id in this.cache)
@@ -87,6 +91,7 @@ export class ProfileService {
   }
 
   saveTab(tab:TabData, profileId:string): Promise<any> {
+    console.log(`saveTab(<TabData>, '${profileId}')`);
     let url = `${this.RESTBaseUrl}/tabs/${tab.id}`
     return this.http.
       put(url, JSON.stringify({"tab": tab, "profileId": profileId}), {headers: this.headers})

@@ -8,6 +8,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
 import { AppRoutingModule } from './app-routing.module';
 
 import { ProfileService } from './profile.service';
+import { ConfigService } from './config.service';
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing.component';
 import {TabComponent } from './tab.component';
@@ -28,7 +29,7 @@ import { CKEIntegrationComponent } from './cke-integration.component';
       HttpModule,
       CKEditorModule
   ],
-  providers: [ProfileService],
+  providers: [ProfileService, ConfigService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

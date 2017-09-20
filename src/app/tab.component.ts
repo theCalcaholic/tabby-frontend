@@ -108,6 +108,7 @@ export class TabComponent  implements OnInit {
     }
 
     tabUpdated(tab:Tab): void {
+      console.log("tabUpdated(<Tab>)");
       this.profileService.saveTab(tab.toData(), this.profile.id);
       this.export();
     }
