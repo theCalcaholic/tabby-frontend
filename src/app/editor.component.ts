@@ -24,4 +24,12 @@ export class EditorComponent {
       iframe.contentWindow.document.write("<body>" + src + "</body>");
       iframe.contentWindow.document.close();
     }
+
+    onClipboardSuccess(): void {
+      console.log("Successfully copied source to clipboard.");
+    }
+
+    onClipboardError(): void {
+      console.log("An error occured while copying to clipboard.");
+    }
 }
