@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import { Tab } from 'tabby-common/tab';
+import { Tab } from 'tabby-common/models/tab';
 
 @Component({
     selector: 'editor',

@@ -14,13 +14,16 @@ import { LandingComponent } from './landing.component';
 import {TabComponent } from './tab.component';
 import { EditorComponent } from './editor.component';
 import { CKEIntegrationComponent } from './cke-integration.component';
+import { ClipboardDirective } from './clipboard.directive';
+
 @NgModule({
   declarations: [
     AppComponent,
     LandingComponent,
     TabComponent,
     EditorComponent,
-    CKEIntegrationComponent
+    CKEIntegrationComponent,
+    ClipboardDirective
   ],
   imports: [
       BrowserModule,
