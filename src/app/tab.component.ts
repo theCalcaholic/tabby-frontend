@@ -3,8 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import { ProfileService } from './profile.service';
-import { Tab, TabData, tabFromData } from 'tabby-common/tab';
-import { Profile } from 'tabby-common/profile';
+import { Tab, TabData, tabFromData } from 'tabby-common/models/tab';
+import { Profile } from 'tabby-common/models/profile';
 
 @Component({
   selector: 'tabs',

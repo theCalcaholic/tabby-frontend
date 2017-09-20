@@ -3,8 +3,8 @@ import { Headers, Http } from '@angular/http'
 import 'rxjs/add/operator/toPromise';
 
 import { ConfigService } from './config.service';
-import { profileFromData, Profile, ProfileData } from 'tabby-common/profile';
-import { TabData } from 'tabby-common/tab';
+import { profileFromData, Profile, ProfileData } from 'tabby-common/models/profile';
+import { TabData } from 'tabby-common/models/tab';
 
 @Injectable()
 export class ProfileService {
