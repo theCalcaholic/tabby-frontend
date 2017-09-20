@@ -2,21 +2,20 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http'
 import 'rxjs/add/operator/toPromise';
 
-import { ConfigService } from './config.service';
 import { profileFromData, Profile, ProfileData } from 'tabby-common/profile';
 import { TabData } from 'tabby-common/tab';
 
+import { environment } from './environment';
+
 @Injectable()
 export class ProfileService {
-  private RESTBaseUrl:string;
+  private RESTBaseUrl = environment.RESTURL;
   //private RESTBaseUrl = "/api/profiles";
   private headers = new Headers({'Content-Type': 'application/json'});
   private cache: { [id: string] : ProfileData } = {};
 
-  constructor( private http: Http, private config:ConfigService )
-  {
-    this.RESTBaseUrl = config.get("RESTURL");
-  }
+  constructor( private http: Http)
+  { }
 
   getProfile(id: string): Promise<Profile> {
     if(id in this.cache)
