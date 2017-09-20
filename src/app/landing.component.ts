@@ -9,7 +9,6 @@ import { Profile } from 'tabby-common/models/profile';
   selector: 'landing',
   template: `
     <h1>Tabby</h1>
-    <a routerLink="edit/9as9u2ob3bonal">TestProfile</a>
     <button (click)="createNewProfile()">New Profile</button>
     <hr>
     `
