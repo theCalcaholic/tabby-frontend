@@ -5,7 +5,7 @@ import 'rxjs/add/operator/toPromise';
 import { profileFromData, Profile, ProfileData } from 'tabby-common/models/profile';
 import { TabData } from 'tabby-common/models/tab';
 
-import { environment } from './environment';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class ProfileService {
@@ -15,7 +15,9 @@ export class ProfileService {
   private cache: { [id: string] : ProfileData } = {};
 
   constructor( private http: Http)
-  { }
+  {
+    console.log("RESTURL: " + this.RESTBaseUrl);
+  }
 
   getProfile(id: string): Promise<Profile> {
     if(id in this.cache)
