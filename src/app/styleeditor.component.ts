@@ -1,4 +1,4 @@
-import { OnInit, Component } from '@angular/core';
+import { OnChanges, OnInit, SimpleChanges, Component } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import { ProfileService } from './profile.service';
 
@@ -20,7 +20,7 @@ function cloneTo(from:Array<any>, to:Array<any>) {
   templateUrl: 'styleeditor.component.html',
   styleUrls: ['styleeditor.component.css']
 })
-export class StyleEditorComponent implements OnInit {
+export class StyleEditorComponent implements OnInit, OnChanges {
   styles: Style[];
   _selectedStyle:Style;
   get selectedStyle():Style {
@@ -40,10 +40,24 @@ export class StyleEditorComponent implements OnInit {
   }
 
   loadStyle(style:Style) {
-    //this.style = style;
+    this.styles.forEach(s => {
+      if(s.id == style.id) {
+        s.loadParameters(style.parameters);
+        this._selectedStyle = s;
+      }
+    });
+  }
+
+  styleUpdate() {
+    this.profileService.updateStyle(this._selectedStyle);
   }
 
   ngOnInit(): void {
     this.profileService.OnStyleUpdate(this.loadStyle.bind(this));
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("gOnChanges()");
+    console.log(changes);
   }
 }

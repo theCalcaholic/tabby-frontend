@@ -14,7 +14,7 @@ export class ProfileService {
   private RESTBaseUrl = environment.RESTURL;
   //private RESTBaseUrl = "/api/profiles";
   private headers = new Headers({'Content-Type': 'application/json'});
-  private cache:ProfileData;
+  private cache:Profile;
   private styleListeners = new Array<Function>();
 
   constructor( private http: Http)
@@ -33,9 +33,9 @@ export class ProfileService {
         console.log("received response:");
         console.log(response);
         let profileData = response.json().data as ProfileData;
-        this.cache = profileData;
+        this.cache = profileFromData(profileData);
         this.updateStyle();
-        return profileFromData(profileData);
+        return this.cache;
       })
       .catch(this.handleError);
   }
@@ -98,6 +98,10 @@ export class ProfileService {
 
   saveTab(tab:TabData, profileId:string): Promise<any> {
     console.log(`saveTab(<TabData>, '${profileId}')`);
+    if(typeof tab.id === 'undefined'){
+      console.log("drop save request - no id defined.");
+      return new Promise((res, rej) => {res();});
+    }
     let url = `${this.RESTBaseUrl}/tabs/${tab.id}`
     return this.http.
       put(url, JSON.stringify({"tab": tab, "profileId": profileId}), {headers: this.headers})
@@ -106,20 +110,38 @@ export class ProfileService {
 
   updateStyle(style?:Style) {
     console.log("ProfileService.updateStyle()");
+    console.log("cache:");
+    console.log(this.cache);
     if(typeof style === 'undefined') {
-      if(typeof this.cache !== 'undefined') {
+      console.log('style parameter is not defined - load style from profile.')
+      console.log(this.cache);
+      if(typeof this.cache === 'undefined') {
+        return;
+      } else {
         styles.forEach((s) => {
-          style = new s();
-          if(style.id == this.cache.styleId) {
-            style.loadParameters(this.cache.styleParameters);
+          let tmpStyle = new s();
+          if(tmpStyle.id === this.cache.styleId) {
+            tmpStyle.loadParameters(this.cache.styleParameters);
+            style = tmpStyle;
           }
         });
       }
-    }
+    } else if(typeof this.cache !== 'undefined') {
+      console.log("save style to db...");
+      const url = `${this.RESTBaseUrl}/profiles/${this.cache.id}/style`;
 
-    this.styleListeners.forEach((callback) => {
-      callback(style);
-    })
+      let data = JSON.stringify({ "styleId": style.id, "styleParameters": style.parameters });
+      console.log(data);
+      this.http.put(url, data, {headers: this.headers})
+      .toPromise().catch((error) => {
+      console.error(error.stack);
+      });
+    }
+    if(style) {
+      this.styleListeners.forEach((callback) => {
+        callback(style);
+      })
+    }
   }
 
   OnStyleUpdate(callback:Function) {

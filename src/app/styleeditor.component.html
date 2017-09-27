@@ -7,7 +7,7 @@
   <ul id='attributes-container'>
     <li *ngFor="let param of selectedStyle.parameters">
       <label for='param-{{param.id}}'>{{param.description}}:</label>
-      <input type='text' name='param-{{param.id}}' [(ngModel)]="param.value">
+      <input type='text' (blur)="styleUpdate()" name='param-{{param.id}}' [(ngModel)]="param.value">
     </li>
   </ul>
 </div>

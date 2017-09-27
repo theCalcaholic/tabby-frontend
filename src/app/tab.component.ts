@@ -57,12 +57,15 @@ export class TabComponent  implements OnInit {
     addNewTab(): void {
       let me = this;
       let tabdata:TabData = {title:"Tab" + (me.profile.tabs.length + 1), content:'', id:undefined};
+      let newTab = tabFromData(tabdata);
+      newTab.OnChange = me.tabUpdated.bind(me, newTab, this.profile.id);
+      me.add(newTab);
       this.profileService.newTab(tabdata, this.profile.id)
         .then((newTabData:TabData) => {
-          console.log("new tab has been created");
-          let newTab = tabFromData(newTabData);
-          newTab.OnChange = me.tabUpdated.bind(me, newTab, this.profile.id);
-          me.add(newTab);
+          console.log(`new tab has been created. Update id (${newTabData.id})...`);
+          newTab.id = newTabData.id;
+          console.log(newTab);
+          this.tabUpdated(newTab);
         });
     }
 
@@ -87,8 +90,8 @@ export class TabComponent  implements OnInit {
       profileSrc += "\n<style type='text/css'>"
                   + "\n" + this.style.exportString()
                   + "\n</style>";
-      console.log("profile src:");
-      console.log(profileSrc);
+      //console.log("profile src:");
+      //console.log(profileSrc);
       this.renderPreview(profileSrc);
     }
 
