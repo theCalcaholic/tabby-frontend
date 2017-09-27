@@ -1,0 +1,21 @@
+#style-editor {
+  position: fixed;
+  right: 0;
+  top: 0;
+  min-width: 400px;
+  background-color: white;
+  border-width: 2px;
+  border-left-style: solid;
+  border-color: black;
+  height: 100%;
+  padding-top: 1em;
+  padding-left: 1em;
+}
+
+#attributes-container {
+  list-style: none;
+}
+
+#attributes-container label {
+  margin-right: 1em;
+}

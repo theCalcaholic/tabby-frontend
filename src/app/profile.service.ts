@@ -4,6 +4,8 @@ import 'rxjs/add/operator/toPromise';
 
 import { profileFromData, Profile, ProfileData } from 'tabby-common/models/profile';
 import { TabData } from 'tabby-common/models/tab';
+import { Style } from 'tabby-common/models/style';
+import { styles } from 'tabby-common/styles/styles';
 
 import { environment } from '../environments/environment';
 
@@ -12,7 +14,8 @@ export class ProfileService {
   private RESTBaseUrl = environment.RESTURL;
   //private RESTBaseUrl = "/api/profiles";
   private headers = new Headers({'Content-Type': 'application/json'});
-  private cache: { [id: string] : ProfileData } = {};
+  private cache:ProfileData;
+  private styleListeners = new Array<Function>();
 
   constructor( private http: Http)
   {
@@ -20,8 +23,8 @@ export class ProfileService {
   }
 
   getProfile(id: string): Promise<Profile> {
-    if(id in this.cache)
-      return Promise.resolve(profileFromData(this.cache[id]));
+    if(typeof this.cache !== 'undefined')
+      return Promise.resolve(profileFromData(this.cache));
 
     let url = `${this.RESTBaseUrl}/profiles/${id}`;
     return this.http.get(url)
@@ -30,7 +33,8 @@ export class ProfileService {
         console.log("received response:");
         console.log(response);
         let profileData = response.json().data as ProfileData;
-        //this.cache[profileData.id] = profileData;
+        this.cache = profileData;
+        this.updateStyle();
         return profileFromData(profileData);
       })
       .catch(this.handleError);
@@ -54,8 +58,9 @@ export class ProfileService {
         console.log("received response:");
         console.log(response);
         let profileData = response.json().data as ProfileData;
-        //this.cache[profileData.id] = profileData;
-        return profileFromData(profileData);
+        this.cache = profileFromData(profileData);
+        this.updateStyle();
+        return this.cache;
       })
       .catch(this.handleError);
   }
@@ -97,6 +102,28 @@ export class ProfileService {
     return this.http.
       put(url, JSON.stringify({"tab": tab, "profileId": profileId}), {headers: this.headers})
       .toPromise();
+  }
+
+  updateStyle(style?:Style) {
+    console.log("ProfileService.updateStyle()");
+    if(typeof style === 'undefined') {
+      if(typeof this.cache !== 'undefined') {
+        styles.forEach((s) => {
+          style = new s();
+          if(style.id == this.cache.styleId) {
+            style.loadParameters(this.cache.styleParameters);
+          }
+        });
+      }
+    }
+
+    this.styleListeners.forEach((callback) => {
+      callback(style);
+    })
+  }
+
+  OnStyleUpdate(callback:Function) {
+    this.styleListeners.push(callback)
   }
 
   private handleError(error: any): Promise<any> {

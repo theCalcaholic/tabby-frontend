@@ -4,14 +4,13 @@ import {TabComponent } from './tab.component';
 import { ProfileService }  from './profile.service';
 
 @Component({
-    selector: 'editor-root',
+    selector: 'tabeditor-root',
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.css'],
 })
 
 export class EditorComponent {
     @ViewChild('preview') resultContainer: ElementRef;
-    title = 'Tabby';
     showExport = false;
     profileSrc: string;
 

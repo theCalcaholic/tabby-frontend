@@ -13,6 +13,8 @@ import { LandingComponent } from './landing.component';
 import {TabComponent } from './tab.component';
 import { EditorComponent } from './editor.component';
 import { CKEIntegrationComponent } from './cke-integration.component';
+import { StyleEditorComponent } from './styleeditor.component';
+import { EditViewComponent } from './editview.component';
 import { ClipboardDirective } from './clipboard.directive';
 
 @NgModule({
@@ -22,6 +24,8 @@ import { ClipboardDirective } from './clipboard.directive';
     TabComponent,
     EditorComponent,
     CKEIntegrationComponent,
+    StyleEditorComponent,
+    EditViewComponent,
     ClipboardDirective
   ],
   imports: [

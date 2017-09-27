@@ -1,0 +1,7 @@
+#editorcontainer {
+  float:left;
+  padding-left: 2em;
+}
+#styleeditor-sidebar {
+  float:right;
+}

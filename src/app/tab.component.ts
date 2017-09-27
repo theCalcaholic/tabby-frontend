@@ -5,6 +5,8 @@ import 'rxjs/add/operator/switchMap';
 import { ProfileService } from './profile.service';
 import { Tab, TabData, tabFromData } from 'tabby-common/models/tab';
 import { Profile } from 'tabby-common/models/profile';
+import { Style } from 'tabby-common/models/style';
+import { styles } from 'tabby-common/styles/styles';
 
 @Component({
   selector: 'tabs',
@@ -18,7 +20,7 @@ export class TabComponent  implements OnInit {
     @Input() renderPreview: Function;
     activeTab: Tab;
     profile: Profile;
-    tabs: Tab[];
+    style: Style;
     private tabComponent: this;
 
     constructor(
@@ -66,6 +68,7 @@ export class TabComponent  implements OnInit {
 
     export(): void {
       console.log(this.profile);
+      if(typeof this.profile === 'undefined' || typeof this.style === 'undefined') return;
       let profileSrc = "<div id='noeditmode'>"
                      + "\n<div class='contentcontainer'>";
       this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
@@ -82,8 +85,10 @@ export class TabComponent  implements OnInit {
       });
       profileSrc += "\n</div>\n</div>";
       profileSrc += "\n<style type='text/css'>"
-                  + "\n" + profileCss
+                  + "\n" + this.style.exportString()
                   + "\n</style>";
+      console.log("profile src:");
+      console.log(profileSrc);
       this.renderPreview(profileSrc);
     }
 
@@ -113,6 +118,12 @@ export class TabComponent  implements OnInit {
       this.export();
     }
 
+    loadStyle(style:Style) {
+      console.log("loading style: " + style.id);
+      this.style = style;
+      this.export();
+    }
+
     ngOnInit(): void {
       this.route.paramMap
         .switchMap((params: ParamMap) => this.profileService.getProfile(params.get('id')))
@@ -120,6 +131,7 @@ export class TabComponent  implements OnInit {
           this.profile = profile;
           this.registerTabs();
         }));
+      this.profileService.OnStyleUpdate(this.loadStyle.bind(this));
     }
 
 }

@@ -5,6 +5,7 @@
   margin-top: 40px;
   text-align: center;
   background-color: black;
+  display: inline-block;
 }
 #preview {
   margin: 40px;
