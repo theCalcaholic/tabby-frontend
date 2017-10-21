@@ -15,7 +15,6 @@ import { EditorComponent } from './editor.component';
 import { CKEIntegrationComponent } from './cke-integration.component';
 import { StyleEditorComponent } from './styleeditor.component';
 import { EditViewComponent } from './editview.component';
-import { StyleParamTextInputComponent } from './styleparamtextinput.component';
 import { ClipboardDirective } from './clipboard.directive';
 
 @NgModule({
@@ -27,7 +26,6 @@ import { ClipboardDirective } from './clipboard.directive';
     CKEIntegrationComponent,
     StyleEditorComponent,
     EditViewComponent,
-    StyleParamTextInputComponent,
     ClipboardDirective
   ],
   imports: [
