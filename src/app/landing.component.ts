@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import { ProfileService } from './profile.service';
-import { Profile } from 'tabby-common/models/profile';
+import { Profile } from '../../../tabby-common/models/profile';
 
 @Component({
   selector: 'landing',

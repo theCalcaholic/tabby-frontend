@@ -3,10 +3,10 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import { ProfileService } from './profile.service';
-import { Tab, TabData, tabFromData } from 'tabby-common/models/tab';
-import { Profile } from 'tabby-common/models/profile';
-import { Style } from 'tabby-common/models/style';
-import { styles } from 'tabby-common/styles/styles';
+import { Tab, TabData, tabFromData } from '../../../tabby-common/models/tab';
+import { Profile } from '../../../tabby-common/models/profile';
+import { Style } from '../../../tabby-common/models/style';
+import { styles } from '../../../tabby-common/styles/styles';
 
 @Component({
   selector: 'tabs',
@@ -69,10 +69,34 @@ export class TabComponent  implements OnInit {
         });
     }
 
+    embedBgMusic(): string {
+      let musicUrl = this.profile.bgMusicUrl;
+      if(!musicUrl)
+        return "";
+
+      let ytWatchPattern = /https?\:\/\/(?:www.)?youtube.com\/watch\?v\=([a-zA-Y0-9]*).*/
+      let ytEmbedPattern = /https?\:\/\/(?:www.)?youtube.com\/embed\/[a-zA-Y0-9]*.*/
+      let match;
+      if(match = ytWatchPattern.exec(musicUrl)) {
+        return "<iframe width='1' height='1' "
+          + "src='https://www.youtube.com/embed/" + match[1] + "?autoplay=1&loop=1' "
+          + "frameborder='0' wmode='transparent' "
+          + "allowfullscreen='0'></iframe>";
+      } else if( match = ytEmbedPattern.exec(musicUrl) ) {
+        return "<iframe width='1' height='1' "
+          + "src='" + match[0] + "' "
+          + "frameborder='0' wmode='transparent' "
+          + "allowfullscreen='0'></iframe>";
+      }
+
+      return "";
+    }
+
     export(): void {
       console.log(this.profile);
       if(typeof this.profile === 'undefined' || typeof this.style === 'undefined') return;
-      let profileSrc = "<div id='noeditmode'>"
+      let profileSrc = this.embedBgMusic();
+      profileSrc += "<div id='noeditmode'>"
                      + "\n<div class='contentcontainer'>";
       this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
         profileSrc += "\n<label class='tabtitle' for='tab" + i + "'>"

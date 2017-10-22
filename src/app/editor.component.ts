@@ -26,9 +26,11 @@ export class EditorComponent {
 
     onClipboardSuccess(): void {
       console.log("Successfully copied source to clipboard.");
+      alert("Successfully copied source to clipboard.");
     }
 
     onClipboardError(): void {
       console.log("An error occured while copying to clipboard.");
+      alert("An error occured while copying to clipboard.");
     }
 }

@@ -2,8 +2,8 @@ import { OnChanges, OnInit, SimpleChanges, Component } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import { ProfileService } from './profile.service';
 
-import { Style, Parameter } from 'tabby-common/models/style';
-import { styles } from 'tabby-common/styles/styles'
+import { Style, Parameter } from '../../../tabby-common/models/style';
+import { styles } from '../../../tabby-common/styles/styles'
 
 function cloneTo(from:Array<any>, to:Array<any>) {
   while( to.length > 0 ) {
@@ -23,6 +23,8 @@ function cloneTo(from:Array<any>, to:Array<any>) {
 export class StyleEditorComponent implements OnInit, OnChanges {
   styles: Style[];
   _selectedStyle:Style;
+  bgMusicUrl:string;
+
   get selectedStyle():Style {
     return this._selectedStyle;
   }
@@ -48,12 +50,27 @@ export class StyleEditorComponent implements OnInit, OnChanges {
     });
   }
 
+  loadMusic(musicUrl:string) {
+    this.bgMusicUrl = musicUrl;
+  }
+
   styleUpdate() {
     this.profileService.updateStyle(this._selectedStyle);
   }
 
+  musicUpdate() {
+    this.profileService.updateBgMusic(this.bgMusicUrl);
+  }
+
   ngOnInit(): void {
     this.profileService.OnStyleUpdate(this.loadStyle.bind(this));
+    this.profileService.OnMusicUpdate(this.loadMusic.bind(this));
+    /*(
+      function(url) {
+        console.log("update music url in style comp: " + url);
+        this.bgMusicUrl = url;
+      }
+    ).bind(this));*/
   }
 
   ngOnChanges(changes: SimpleChanges): void {

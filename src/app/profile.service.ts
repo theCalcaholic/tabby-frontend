@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http'
 import 'rxjs/add/operator/toPromise';
 
-import { profileFromData, Profile, ProfileData } from 'tabby-common/models/profile';
-import { TabData } from 'tabby-common/models/tab';
-import { Style } from 'tabby-common/models/style';
-import { styles } from 'tabby-common/styles/styles';
+import { profileFromData, Profile, ProfileData } from '../../../tabby-common/models/profile';
+import { TabData } from '../../../tabby-common/models/tab';
+import { Style } from '../../../tabby-common/models/style';
+import { styles } from '../../../tabby-common/styles/styles';
 
 import { environment } from '../environments/environment';
 
@@ -15,7 +15,8 @@ export class ProfileService {
   //private RESTBaseUrl = "/api/profiles";
   private headers = new Headers({'Content-Type': 'application/json'});
   private cache:Profile;
-  private styleListeners = new Array<Function>();
+  private styleCallbacks = new Array<Function>();
+  private musicCallbacks = new Array<Function>();
 
   constructor( private http: Http)
   {
@@ -35,6 +36,7 @@ export class ProfileService {
         let profileData = response.json().data as ProfileData;
         this.cache = profileFromData(profileData);
         this.updateStyle();
+        this.updateBgMusic();
         return this.cache;
       })
       .catch(this.handleError);
@@ -118,8 +120,8 @@ export class ProfileService {
       if(typeof this.cache === 'undefined') {
         return;
       } else {
-        styles.forEach((s) => {
-          let tmpStyle = new s();
+        styles.forEach((StyleType) => {
+          let tmpStyle = new StyleType();
           if(tmpStyle.id === this.cache.styleId) {
             tmpStyle.loadParameters(this.cache.styleParameters);
             style = tmpStyle;
@@ -138,18 +140,48 @@ export class ProfileService {
       });
     }
     if(style) {
-      this.styleListeners.forEach((callback) => {
+      this.styleCallbacks.forEach((callback) => {
         callback(style);
       })
     }
   }
 
+  updateBgMusic(musicUrl?:string) {
+    console.log("ProfileService.updateBgMusic()");
+    if(typeof musicUrl === 'undefined') {
+      console.log("url parameter is not defined - load bg music url from profile.")
+      if(typeof this.cache === 'undefined') {
+        return;
+      } else {
+        musicUrl = this.cache.bgMusicUrl;
+      }
+    } else if( typeof this.cache !== 'undefined' ){
+      console.log("save bg music url to db...");
+      const url = `${this.RESTBaseUrl}/profiles/${this.cache.id}/background-music`;
+
+      let data = JSON.stringify({ "bgMusicUrl": musicUrl });
+      this.http.put(url, data, {headers: this.headers})
+        .toPromise().catch((error) => {
+          this.handleError(error);
+        });
+    }
+    if(musicUrl) {
+      this.musicCallbacks.forEach((callback) => {
+        callback(musicUrl);
+      })
+    }
+  }
+
   OnStyleUpdate(callback:Function) {
-    this.styleListeners.push(callback)
+    this.styleCallbacks.push(callback)
+  }
+
+  OnMusicUpdate(callback:Function) {
+    this.musicCallbacks.push(callback);
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occured', error);
+    console.error('An error occured', error, error.stack);
     return Promise.reject(error.message || error);
   }
 }
