@@ -11,9 +11,7 @@ import { styles } from '../../../tabby-common/styles/styles';
 @Component({
   selector: 'tabs',
   templateUrl: 'tab.component.html',
-  styles: [`.active {
-          color: red;
-      }`]
+  styleUrls: ['./tab.component.css']
 
 })
 export class TabComponent  implements OnInit {
@@ -78,12 +76,12 @@ export class TabComponent  implements OnInit {
       let ytEmbedPattern = /https?\:\/\/(?:www.)?youtube.com\/embed\/[a-zA-Y0-9]*.*/
       let match;
       if(match = ytWatchPattern.exec(musicUrl)) {
-        return "<iframe width='1' height='1' "
+        return "<iframe width='0' height='0' "
           + "src='https://www.youtube.com/embed/" + match[1] + "?autoplay=1&loop=1' "
           + "frameborder='0' wmode='transparent' "
           + "allowfullscreen='0'></iframe>";
       } else if( match = ytEmbedPattern.exec(musicUrl) ) {
-        return "<iframe width='1' height='1' "
+        return "<iframe width='0' height='0' "
           + "src='" + match[0] + "' "
           + "frameborder='0' wmode='transparent' "
           + "allowfullscreen='0'></iframe>";

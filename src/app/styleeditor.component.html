@@ -3,15 +3,33 @@
     <label for='bgmusicUrl'>Background-Music:</label>
     <input type='url' (blur)="musicUpdate()" name='bgmusicUrl' [(ngModel)]='bgMusicUrl'>
   </div>
+  <h2>Styling</h2>
   <select [(ngModel)]="selectedStyle">
     <option *ngFor="let style of styles" [ngValue]="style">
       {{style.id}}
     </option>
   </select>
   <ul id='attributes-container'>
-    <li *ngFor="let param of selectedStyle.parameters">
+    <li *ngFor="let param of selectedStyle.parameters" class='style-parameter-item'>
       <label for='param-{{param.id}}'>{{param.description}}:</label>
-      <input type='{{param.type}}' (blur)="styleUpdate()" (change)="styleUpdate()" name='param-{{param.id}}' [(ngModel)]="param.value">
+      <input
+        class='style-parameter-input-field'
+        *ngIf="param.type === 'number'"
+        type='{{param.type}}'
+        (blur)="styleUpdate()"
+        (change)="styleUpdate()"
+        name='param-{{param.id}}'
+        [(ngModel)]="param.value"
+        step='0.1'
+        max='5'>
+      <input
+        class='style-parameter-input-field'
+        *ngIf="param.type != 'number'"
+        type='{{param.type}}'
+        (blur)="styleUpdate()"
+        (change)="styleUpdate()"
+        name='param-{{param.id}}'
+        [(ngModel)]="param.value">
     </li>
   </ul>
 </div>

@@ -19,3 +19,20 @@
 #attributes-container label {
   margin-right: 1em;
 }
+
+#bg-music-editor {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  padding-bottom: 20px;
+  display: block;
+}
+
+.style-parameter-input-field {
+  float:right;
+}
+
+.style-parameter-item {
+  display: block;
+  padding: 4px;
+  margin: 10px;
+}

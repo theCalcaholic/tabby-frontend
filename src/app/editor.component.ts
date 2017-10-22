@@ -18,10 +18,12 @@ export class EditorComponent {
       this.showExport = true;
       this.profileSrc = src;
       let iframe: HTMLIFrameElement
-      = <HTMLIFrameElement> this.resultContainer.nativeElement;
+        = <HTMLIFrameElement> this.resultContainer.nativeElement;
       iframe.contentWindow.document.open();
-      iframe.contentWindow.document.write("<body>" + src + "</body>");
+      iframe.contentWindow.document.write("<body style='margin:0;'>" + src + "</body>");
       iframe.contentWindow.document.close();
+      iframe.style.height = iframe.contentWindow.document.body.offsetHeight + 'px';
+      //iframe.clientHeight
     }
 
     onClipboardSuccess(): void {
