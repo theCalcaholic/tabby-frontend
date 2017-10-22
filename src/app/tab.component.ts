@@ -93,8 +93,7 @@ export class TabComponent  implements OnInit {
     export(): void {
       if(typeof this.profile === 'undefined' || typeof this.style === 'undefined') return;
       let profileSrc = this.embedBgMusic();
-      profileSrc += "<div id='noeditmode'>"
-                     + "\n<div class='contentcontainer'>";
+      profileSrc += "<div class='contentcontainer'>";
       this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
         profileSrc += "\n<label class='tabtitle' for='tab" + i + "'>"
                     + tab.title + "</label>";
@@ -107,7 +106,7 @@ export class TabComponent  implements OnInit {
         profileSrc += "\n" + tab.content;
         profileSrc += "\n</div>";
       });
-      profileSrc += "\n</div>\n</div>";
+      profileSrc += "\n</div>";
       profileSrc += "\n<style type='text/css'>"
                   + "\n" + this.style.exportString()
                   + "\n</style>";
