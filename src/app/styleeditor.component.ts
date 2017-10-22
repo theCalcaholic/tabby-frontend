@@ -24,6 +24,17 @@ export class StyleEditorComponent implements OnInit, OnChanges {
   styles: Style[];
   _selectedStyle:Style;
   bgMusicUrl:string;
+  isCollapsed = false;
+  toggleButtonText = ">>"
+
+  toggleCollapsed() {
+    this.isCollapsed = !this.isCollapsed
+    if(this.isCollapsed) {
+      this.toggleButtonText = "<<";
+    } else {
+      this.toggleButtonText = ">>";
+    }
+  }
 
   get selectedStyle():Style {
     return this._selectedStyle;

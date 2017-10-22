@@ -1,4 +1,7 @@
-<div id='style-editor'>
+<div id='style-editor' [ngClass]="{collapsed: isCollapsed}">
+  <div id='toggle-styleeditor-button' (click)="toggleCollapsed()">
+    {{toggleButtonText}}
+  </div>
   <div id='bg-music-editor'>
     <label for='bgmusicUrl'>Background-Music:</label>
     <input type='url' (blur)="musicUpdate()" name='bgmusicUrl' [(ngModel)]='bgMusicUrl'>
