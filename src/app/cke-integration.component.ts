@@ -1,33 +1,46 @@
-import {Component, Input} from '@angular/core';
+import { OnInit, Component, Input } from '@angular/core';
 import { Tab } from '../../../tabby-common/models/tab';
+import { ProfileService } from './profile.service';
 
 @Component({
     selector: 'editor',
     template: `
       <div class="editorcontainer">
-        <textarea
-          *ngIf="editmode=='source'"
-          [(ngModel)]="tab.content"
-          class='editor'
-          width='300'
-          height='20'>
-        </textarea>
 				<ckeditor
-          *ngIf="editmode=='cke'"
           [(ngModel)]="tab.content"
           debounce="500"
-          [config]="{contentsCss: '../assets/tabstyle.css'}"
+          [config]="{contentsCss: styleUrl}"
         >
         </ckeditor>
       </div>
     `,
-    styles: [``]
+    styles: [``],
 })
 
-export class CKEIntegrationComponent {
+export class CKEIntegrationComponent implements OnInit {
   @Input() tab: Tab;
   @Input() tabStyles : string;
-  editmode = 'cke';
+  styleUrl= "";
 
+  constructor(
+    private profileService: ProfileService,
+  ) {
+
+  }
+  changeStyleUrl() {
+
+  }
+
+  updateStyleUrl(url:string) {
+    if(!url) {
+      this.styleUrl = "";
+      return;
+    }
+    this.styleUrl = url;
+  }
+
+  ngOnInit() {
+    this.styleUrl = this.profileService.getStyleUrl();
+  }
 
 }

@@ -10,7 +10,7 @@
   <div *ngIf="activeTab" class='editorcontainer'>
       <!--<textarea *ngIf="editmode=='source'" [(ngModel)]="activeTab.content" class='editor' width='300' height='20'>
       </textarea>-->
-      <editor [tab]="activeTab" [tabStyles]="style">
+      <editor *ngIf="profile.id" [tab]="activeTab" [tabStyles]="style">
       </editor>
   </div>
 </div>

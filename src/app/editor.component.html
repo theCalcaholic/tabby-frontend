@@ -1,6 +1,7 @@
 <div class='tabscontainer'>
   <tabs [renderPreview]="renderPreview.bind(this)"></tabs>
 </div>
+<h1 [class.hidden]="!showExport" id='previewHead'>Preview</h1>
 <button
   [class.hidden]="!showExport" [clipboard]
   [attr.data-clipboard-text]="profileSrc"
@@ -9,7 +10,6 @@
 >
   Copy Source Code to Clipboard
 </button>
-<h1 [class.hidden]="!showExport" id='previewHead'>Preview</h1>
 <div [class.hidden]="!showExport" id='previewContainer'>
 <iframe
   id='preview'

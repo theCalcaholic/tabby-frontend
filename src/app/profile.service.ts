@@ -17,6 +17,7 @@ export class ProfileService {
   private cache:Profile;
   private styleCallbacks = new Array<Function>();
   private musicCallbacks = new Array<Function>();
+  private styleUrlCallbacks = new Array<Function>();
 
   constructor( private http: Http)
   {
@@ -37,6 +38,7 @@ export class ProfileService {
         this.cache = profileFromData(profileData);
         this.updateStyle();
         this.updateBgMusic();
+        this.broadcastStyleUrl();
         return this.cache;
       })
       .catch(this.handleError);
@@ -178,6 +180,28 @@ export class ProfileService {
 
   OnMusicUpdate(callback:Function) {
     this.musicCallbacks.push(callback);
+  }
+
+  OnStyleUrlUpdate(callback:Function) {
+    this.styleUrlCallbacks.push(callback);
+  }
+
+  getStyleUrl() {
+    if(this.cache) {
+      return `${this.RESTBaseUrl}/profiles/${this.cache.id}/style`;
+    }
+    return "";
+  }
+
+  broadcastStyleUrl() {
+    console.log("broadcastStyleUrl()");
+    if(!this.cache) return;
+    let styleUrl = `${this.RESTBaseUrl}/profiles/${this.cache.id}/style`;
+    console.log("style url: " + styleUrl);
+
+    this.styleUrlCallbacks.forEach((cb) => {
+      cb(styleUrl);
+    });
   }
 
   private handleError(error: any): Promise<any> {
