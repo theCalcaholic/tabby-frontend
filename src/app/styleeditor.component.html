@@ -7,7 +7,7 @@
     <label for='bgmusicUrl'>Background-Music:</label>
     <input class='bgmusic-url-input' type='url' (blur)="musicUpdate()" name='bgmusicUrl' [(ngModel)]='bgMusicUrl'>
   </div>
-  <h2>Styling</h2>
+  <h2>Theme</h2>
   <select [(ngModel)]="selectedStyle">
     <option *ngFor="let style of styles" [ngValue]="style">
       {{style.id}}
