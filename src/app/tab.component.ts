@@ -35,6 +35,25 @@ export class TabComponent  implements OnInit {
         this.export();
     }
 
+    delete(tab: Tab): boolean {
+      let tabId = -1;
+      for(let i = 0; i < this.profile.tabs.length; i++ ) {
+        if( tab === this.profile.tabs[i] ) {
+          let confirmed
+            = confirm(`Do you really want to delete tab ${i + 1} ('${tab.title}')?`);
+          if(!confirmed)
+            return false;
+          tabId = this.profile.tabs[i].id;
+          this.profile.tabs.splice(i, 1);
+        }
+      }
+      if(tabId != -1) {
+        this.profileService.deleteTab(tabId, this.profile.id);
+        this.export();
+      }
+      return false;
+    }
+
     activate(tab: Tab): void {
       if(this.activeTab === tab)
       {

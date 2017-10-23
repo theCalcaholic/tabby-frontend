@@ -112,6 +112,14 @@ export class ProfileService {
       .toPromise();
   }
 
+  deleteTab(tabId:number, profileId:string): Promise<any> {
+    console.log(`saveTab(<TabData>, '${profileId}')`);
+    let url = `${this.RESTBaseUrl}/tabs/${tabId}`
+    return this.http.
+      put(url, JSON.stringify({"tab": null, "profileId": profileId}), {headers: this.headers})
+      .toPromise();
+  }
+
   updateStyle(style?:Style) {
     console.log("ProfileService.updateStyle()");
     console.log("cache:");

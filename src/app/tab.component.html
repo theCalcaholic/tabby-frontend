@@ -4,7 +4,8 @@
     class="tabtitle"
     id="tabtitle_{{tab.id}}"
     for="tab_{{tab.id}}"
-    (click)="activate(tab)">
+    (click)="activate(tab)"
+    (contextmenu)="delete(tab)">
       {{tab.title}}
   </label><label class='tabtitle button' id='addtab-button' (click)="addNewTab()">+</label>
   <div *ngIf="activeTab" class='editorcontainer'>
