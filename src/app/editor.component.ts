@@ -15,6 +15,7 @@ export class EditorComponent {
     profileSrc: string;
 
     renderPreview(src: string): void {
+      console.log("renderPreview(string)");
       this.showExport = true;
       this.profileSrc = src;
       let iframe: HTMLIFrameElement
