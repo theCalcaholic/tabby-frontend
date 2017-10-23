@@ -5,7 +5,7 @@
   </div>
   <div id='bg-music-editor'>
     <label for='bgmusicUrl'>Background-Music:</label>
-    <input type='url' (blur)="musicUpdate()" name='bgmusicUrl' [(ngModel)]='bgMusicUrl'>
+    <input class='bgmusic-url-input' type='url' (blur)="musicUpdate()" name='bgmusicUrl' [(ngModel)]='bgMusicUrl'>
   </div>
   <h2>Styling</h2>
   <select [(ngModel)]="selectedStyle">

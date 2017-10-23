@@ -26,6 +26,7 @@
 #bg-music-editor {
   border-bottom-style: solid;
   border-bottom-width: 1px;
+  padding: 10px;
   padding-bottom: 20px;
   display: block;
 }
@@ -72,4 +73,13 @@
 
 #toggle-styleeditor-button-bg.collapsed {
   right: -4px;
+}
+
+input[type='number'] {
+  text-align: center;
+  width: 58px;
+}
+
+.bgmusic-url-input {
+  float: right;
 }
