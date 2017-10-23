@@ -17,16 +17,11 @@
 
 #addtab-button {
   border-style: solid;
-  border-color: #1A1A33;
   border-width: 2px;
-  background-color: #1A1A33;
-  color: #F0F0FF;
   display: inline-block;
-  height: 12px;
-  width: 12px;
-  line-height: 12px;
+  height: 13px;
+  width: 13px;
+  line-height: 13px;
   padding: 4px;
-  text-align: center;
   margin-left: 6px;
-  border-radius: 15px;
 }

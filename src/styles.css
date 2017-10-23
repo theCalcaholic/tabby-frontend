@@ -2,4 +2,23 @@
 body {
   margin: 0;
   padding: 0;
+  background-color: #556;
 }
+
+h1 {
+  color: #f0f0ff;
+}
+
+.button {
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: 
+    color: #f0f0ff;
+    border-color: #f0f0ff;
+    border-width: 2px;
+    border-style: solid;
+    text-align: center;
+
+}
+
+
