@@ -9,16 +9,27 @@ h1 {
   color: #f0f0ff;
 }
 
-.button {
+.button, .inverted-button {
     cursor: pointer;
     border-radius: 50%;
-    background-color: #1a1a33;
-    color: #f0f0ff;
-    border-color: #f0f0ff;
     border-width: 2px;
     border-style: solid;
     text-align: center;
-
 }
 
+.button {
+    background-color: #1a1a33;
+    color: #f0f0ff;
+    border-color: #f0f0ff;
+}
 
+.inverted-button {
+    background-color: #f0f0ff;
+    color: #1a1a33;
+    border-color: #1a1a33;
+}
+
+style-editor {
+  display: block;
+  width: 400px;
+}
