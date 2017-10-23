@@ -3,14 +3,15 @@
   right: 0;
   top: 0;
   min-width: 400px;
-  background-color: white;
+  background-color: #f0f0ff;
   border-width: 2px;
   border-left-style: solid;
-  border-color: black;
+  border-color: #1a1a33;
   height: 100%;
   padding-top: 1em;
   padding-left: 1em;
   box-sizing: border-box;
+  color: #1a1a33;
 }
 
 #attributes-container {
