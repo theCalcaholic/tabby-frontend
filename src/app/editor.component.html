@@ -9,7 +9,14 @@
 >
   Copy Source Code to Clipboard
 </button>
-<h1 [class.hidden]="!showExport" id='previewHead'>Preview</h1>
+<div id='preview-settings-container'>
+  <h1 [class.hidden]="!showExport" id='previewHead'>Preview</h1>
+  <input
+    id='mute-preview-checkbox'
+    name='mutePreview' type='checkbox'
+    [(ngModel)]='mutePreview'>
+  <label for='mutePreview' id='mutePreviewLabel'>Mute Preview</label>
+</div>
 <div [class.hidden]="!showExport" id='previewContainer'>
 <iframe
   id='preview'

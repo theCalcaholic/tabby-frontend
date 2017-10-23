@@ -1,14 +1,15 @@
-.active {
-  color: red;
-}
-
 .tabtitle:not(#addtab-button) {
   background-color: #F0F0FF;
   border-bottom-style: solid;
   border-bottom-width: 4px;
-  border-bottom-colour: #1A1A33;
+  border-bottom-color: #1A1A33;
   padding: 4px;
   display: inline-block;;
+}
+
+.tabtitle.active:not(#addtab-button) {
+  color: red;
+  border-bottom-color: red;
 }
 
 .tabtitle:hover {

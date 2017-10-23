@@ -91,28 +91,37 @@ export class TabComponent  implements OnInit {
       if(!musicUrl)
         return "";
 
-      let embedCode = "<iframe width='0' height='0' "
+      let ytEmbedCode = "<iframe width='0' height='0' "
         + "src='\${url}' "
         + "frameborder='0' wmode='transparent' "
         + "allowfullscreen='0'></iframe>";
+      let mp3EmbedCode = `
+      <audio autoplay='1' loop>
+          <source src='\${url}' type='audio/mp3'>
+      </audio>`;
 
-      let ytWatchPattern = /https?\:\/\/(?:www.)?youtube.com\/watch\?v\=([a-zA-Y0-9]*).*/
-      let ytEmbedPattern1 = /https?\:\/\/(?:www.)?youtube.com\/embed\/([a-zA-Y0-9]*).*/
-      let ytEmbedPattern2 = /https?\:\/\/(?:www.)?youtube.com\/v\/[a-zA-Y0-9]*.*/
+      let mp3Pattern = /^https?\:\/\/(?:www\.)?.*\.mp3(?:\?.*)?$/
+      let ytWatchPattern = /https?\:\/\/(?:www\.)?youtube.com\/watch\?v\=([a-zA-Z0-9]*).*/
+      let ytEmbedPattern1 = /https?\:\/\/(?:www\.)?youtube.com\/embed\/([a-zA-Z0-9]*).*/
       let videoId;
       let match;
-      if(match = ytWatchPattern.exec(musicUrl)) {
+      if( match = mp3Pattern.exec(musicUrl)) {
+        return mp3EmbedCode.replace('${url}', musicUrl);
+      } else if(match = ytWatchPattern.exec(musicUrl)) {
         videoId = match[1]
       } else if( match = ytEmbedPattern1.exec(musicUrl) ) {
-        videoId = match[1]
-      } else if( match = ytEmbedPattern2.exec(musicUrl) ) {
-        return embedCode.replace("${url}", match[0])
+        videoId = match[1];
+        if(!musicUrl.search("playlist=")) {
+          musicUrl += `${musicUrl.search("?") ? "&" : "?"}`
+            + `&playlist=${videoId}`;
+        }
+        return ytEmbedCode.replace("${url}", musicUrl)
       }
 
       if( videoId ) {
-        return embedCode.replace(
+        return ytEmbedCode.replace(
           "${url}",
-          "https://www.youtube.com/v/" + videoId + "?autoplay=1&loop=1"
+          `https://www.youtube.com/embed/${videoId}?playlist=${videoId}&autoplay=1&loop=1`
         );
       }
 
