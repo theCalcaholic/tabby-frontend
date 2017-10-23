@@ -91,19 +91,29 @@ export class TabComponent  implements OnInit {
       if(!musicUrl)
         return "";
 
+      let embedCode = "<iframe width='0' height='0' "
+        + "src='\${url}' "
+        + "frameborder='0' wmode='transparent' "
+        + "allowfullscreen='0'></iframe>";
+
       let ytWatchPattern = /https?\:\/\/(?:www.)?youtube.com\/watch\?v\=([a-zA-Y0-9]*).*/
-      let ytEmbedPattern = /https?\:\/\/(?:www.)?youtube.com\/embed\/[a-zA-Y0-9]*.*/
+      let ytEmbedPattern1 = /https?\:\/\/(?:www.)?youtube.com\/embed\/([a-zA-Y0-9]*).*/
+      let ytEmbedPattern2 = /https?\:\/\/(?:www.)?youtube.com\/v\/[a-zA-Y0-9]*.*/
+      let videoId;
       let match;
       if(match = ytWatchPattern.exec(musicUrl)) {
-        return "<iframe width='0' height='0' "
-          + "src='https://www.youtube.com/embed/" + match[1] + "?autoplay=1&loop=1' "
-          + "frameborder='0' wmode='transparent' "
-          + "allowfullscreen='0'></iframe>";
-      } else if( match = ytEmbedPattern.exec(musicUrl) ) {
-        return "<iframe width='0' height='0' "
-          + "src='" + match[0] + "' "
-          + "frameborder='0' wmode='transparent' "
-          + "allowfullscreen='0'></iframe>";
+        videoId = match[1]
+      } else if( match = ytEmbedPattern1.exec(musicUrl) ) {
+        videoId = match[1]
+      } else if( match = ytEmbedPattern2.exec(musicUrl) ) {
+        return embedCode.replace("${url}", match[0])
+      }
+
+      if( videoId ) {
+        return embedCode.replace(
+          "${url}",
+          "https://www.youtube.com/v/" + videoId + "?autoplay=1&loop=1"
+        );
       }
 
       return "";
