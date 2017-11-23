@@ -11,7 +11,8 @@ import { Profile } from '../../../tabby-common/models/profile';
     <h1>Tabby</h1>
     <button (click)="createNewProfile()">New Profile</button>
     <hr>
-    `
+    `,
+  styleUrls: ['landing.component.css']
 })
 export class LandingComponent {
   constructor(
