@@ -101,8 +101,8 @@ export class TabComponent  implements OnInit {
       </audio>`;
 
       let mp3Pattern = /^https?\:\/\/(?:www\.)?.*\.mp3(?:\?.*)?$/
-      let ytWatchPattern = /https?\:\/\/(?:www\.)?youtube.com\/watch\?v\=([a-zA-Z0-9]*).*/
-      let ytEmbedPattern1 = /https?\:\/\/(?:www\.)?youtube.com\/embed\/([a-zA-Z0-9]*).*/
+      let ytWatchPattern = /https?\:\/\/(?:www\.)?youtube.com\/watch\?v\=([a-zA-Z0-9_-]*).*/
+      let ytEmbedPattern1 = /https?\:\/\/(?:www\.)?youtube.com\/embed\/([a-zA-Z0-9_-]*).*/
       let videoId;
       let match;
       if( match = mp3Pattern.exec(musicUrl)) {
