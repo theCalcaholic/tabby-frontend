@@ -8,9 +8,11 @@ import { Profile } from '../../../tabby-common/models/profile';
 @Component({
   selector: 'landing',
   template: `
-    <h1>Tabby</h1>
-    <button (click)="createNewProfile()">New Profile</button>
-    <hr>
+    <div class='page-container'>
+      <h1>Tabby</h1>
+      <div class='create-profile-button button' (click)="createNewProfile()">Jump in!</div>
+      <hr>
+    </div>
     `,
   styleUrls: ['landing.component.css']
 })
