@@ -32,6 +32,18 @@ export class EditorComponent {
           .replace("autoplay=1", '')
           .replace("autoplay", "");
       }
+      let hashlinkregex = /href=[\'\"]#([^\'\"]*)[\'\"]/i;
+      let match;
+      do {
+        match = hashlinkregex.exec(finalSrc);;
+        if(match) {
+          finalSrc = finalSrc.substring(0, match.index)
+            + `onclick=document.getElementById("${match[1]}").scrollIntoView(); `
+            + " style='cursor:pointer;'"
+            + finalSrc.substring(match.index + match[0].length);
+        }
+      } while(match)
+
       let iframe: HTMLIFrameElement
         = <HTMLIFrameElement> this.resultContainer.nativeElement;
       iframe.contentWindow.document.open();

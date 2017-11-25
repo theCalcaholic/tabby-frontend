@@ -7,6 +7,7 @@ import { Tab, TabData, tabFromData } from '../../../tabby-common/models/tab';
 import { Profile } from '../../../tabby-common/models/profile';
 import { Style } from '../../../tabby-common/models/style';
 import { styles } from '../../../tabby-common/styles/styles';
+import { HtmlTemplateContainer } from './html.template.container';
 
 @Component({
   selector: 'tabs',
@@ -131,7 +132,26 @@ export class TabComponent  implements OnInit {
     export(): void {
       if(typeof this.profile === 'undefined' || typeof this.style === 'undefined') return;
       let profileSrc = this.embedBgMusic();
-      profileSrc += "<div class='contentcontainer'>";
+      switch(this.style.htmlTemplate) {
+        case 0:
+          profileSrc += this.exportTemplate1();
+          break;
+        case 1:
+          profileSrc += this.exportTemplate2();
+          break;
+        default:
+          profileSrc += this.exportTemplate1();
+          break;
+      }
+      profileSrc += "\n<style type='text/css'>"
+                  + "\n" + this.style.exportString()
+                  + "\n</style>";
+      this.renderPreview(profileSrc);
+
+    }
+
+    exportTemplate1(): string {
+      let profileSrc = "<div class='contentcontainer'>";
       this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
         profileSrc += "\n<label class='tabtitle' for='tab" + i + "'>"
                     + tab.title + "</label>";
@@ -145,12 +165,25 @@ export class TabComponent  implements OnInit {
         profileSrc += "\n</div>";
       });
       profileSrc += "\n</div>";
-      profileSrc += "\n<style type='text/css'>"
-                  + "\n" + this.style.exportString()
-                  + "\n</style>";
-      //console.log("profile src:");
-      //console.log(profileSrc);
-      this.renderPreview(profileSrc);
+      return profileSrc;
+    }
+
+    exportTemplate2(): string {
+      let template = new HtmlTemplateContainer().template2;
+      let profileSrc = template.parts[0];
+      this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
+        profileSrc += template.tablink_template
+          .replace("\${id}", 'tab' + i)
+          .replace("\${title}", tab.title);
+      });
+      profileSrc += template.parts[1];
+      this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
+        profileSrc += template.tab_template
+          .replace("\${id}", 'tab' + i)
+          .replace("\${content}", tab.content);
+      });
+      profileSrc += template.parts[2];
+      return profileSrc;
     }
 
     registerTabs(): void {
