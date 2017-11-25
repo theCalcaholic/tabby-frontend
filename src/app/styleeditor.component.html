@@ -25,9 +25,14 @@
         name='param-{{param.id}}'
         [(ngModel)]="param.value"
         step='0.1'>
+      <dropdown-parameter
+        class='dropdown'
+        *ngIf="param.type === 'dropdown'"
+        [parameter]="param"
+        [updateFun]="updateParameter.bind(this)"></dropdown-parameter>
       <input
         class='style-parameter-input-field'
-        *ngIf="param.type != 'number'"
+        *ngIf="param.type != 'number' && param.type != 'dropdown'"
         type='{{param.type}}'
         (blur)="styleUpdate()"
         (change)="styleUpdate()"

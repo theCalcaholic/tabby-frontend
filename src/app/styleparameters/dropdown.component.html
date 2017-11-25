@@ -1,0 +1,5 @@
+<select [(ngModel)]="parameter.value" name="param-{{parameter.id}}" (change)="updateFun(parameter.id, $event.target.value)">
+  <option *ngFor="let option of parameter.options">
+    {{option}}
+  </option>
+</select>

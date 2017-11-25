@@ -80,6 +80,10 @@ input[type='number'] {
   width: 58px;
 }
 
+.dropdown {
+  float: right;
+}
+
 .bgmusic-url-input {
   float: right;
 }

@@ -69,6 +69,16 @@ export class StyleEditorComponent implements OnInit, OnChanges {
     this.profileService.updateStyle(this._selectedStyle);
   }
 
+  updateParameter(id: string, value: string) {
+    this._selectedStyle.parameters.forEach((param) => {
+      if(param.id == id) {
+        param.value = value;
+      }
+    });
+    this.styleUpdate();
+  }
+
+
   musicUpdate() {
     this.profileService.updateBgMusic(this.bgMusicUrl);
   }

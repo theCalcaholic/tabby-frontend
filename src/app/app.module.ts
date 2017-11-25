@@ -16,6 +16,7 @@ import { CKEIntegrationComponent } from './cke-integration.component';
 import { StyleEditorComponent } from './styleeditor.component';
 import { EditViewComponent } from './editview.component';
 import { ClipboardDirective } from './clipboard.directive';
+import { DropdownParameterComponent } from './styleparameters/dropdown.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ClipboardDirective } from './clipboard.directive';
     CKEIntegrationComponent,
     StyleEditorComponent,
     EditViewComponent,
+    DropdownParameterComponent,
     ClipboardDirective
   ],
   imports: [
