@@ -16,15 +16,6 @@
   <ul id='attributes-container'>
     <li *ngFor="let param of selectedStyle.parameters" class='style-parameter-item'>
       <label for='param-{{param.id}}'>{{param.description}}:</label>
-      <input
-        class='style-parameter-input-field'
-        *ngIf="param.type === 'number'"
-        type='{{param.type}}'
-        (blur)="styleUpdate()"
-        (change)="styleUpdate()"
-        name='param-{{param.id}}'
-        [(ngModel)]="param.value"
-        step='0.1'>
       <dropdown-parameter
         class='dropdown'
         *ngIf="param.type === 'dropdown'"
@@ -39,12 +30,15 @@
         [(ngModel)]="param.value"></textarea>
       <input
         class='style-parameter-input-field'
-        *ngIf="param.type != 'number' && param.type != 'dropdown' && param.type != 'multiline'"
+        *ngIf="param.type != 'dropdown' && param.type != 'multiline'"
         type='{{param.type}}'
         (blur)="styleUpdate()"
         (change)="styleUpdate()"
         name='param-{{param.id}}'
-        [(ngModel)]="param.value">
+        [(ngModel)]="param.value"
+        step='{{param.step || 0.1}}'
+        min='{{param.min || 0}}'
+        max='{{param.max || 100}}'>
     </li>
   </ul>
 </div>
