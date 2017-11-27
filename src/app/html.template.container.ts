@@ -35,7 +35,7 @@ export class HtmlTemplateContainer {
         </div>
         </div>`],
       tablink_template: `\
-        <a href="#\${id}" class='tablink'>\${title}</a>`,
+        <a href="#\${id}" class='tablink tablink-\${id}'>\${title}</a>`,
       tab_template: `\
         <div id=\${id} class="page">\${content}
         <a href="#menu" class='homelink'>HOME</a>

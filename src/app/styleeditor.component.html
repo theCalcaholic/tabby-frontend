@@ -30,9 +30,16 @@
         *ngIf="param.type === 'dropdown'"
         [parameter]="param"
         [updateFun]="updateParameter.bind(this)"></dropdown-parameter>
+      <textarea
+        class='style-parameter-input-field'
+        *ngIf="param.type === 'multiline'"
+        (blur)="styleUpdate()"
+        (change)="styleUpdate()"
+        name='param-{{param.id}}'
+        [(ngModel)]="param.value"></textarea>
       <input
         class='style-parameter-input-field'
-        *ngIf="param.type != 'number' && param.type != 'dropdown'"
+        *ngIf="param.type != 'number' && param.type != 'dropdown' && param.type != 'multiline'"
         type='{{param.type}}'
         (blur)="styleUpdate()"
         (change)="styleUpdate()"

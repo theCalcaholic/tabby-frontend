@@ -173,14 +173,14 @@ export class TabComponent  implements OnInit {
       let profileSrc = template.parts[0];
       this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
         profileSrc += template.tablink_template
-          .replace("\${id}", 'tab' + i)
-          .replace("\${title}", tab.title);
+          .replace(new RegExp("\\$\\{id\\}", 'g'), 'tab' + i)
+          .replace(new RegExp("\\$\\{title\\}", 'g'), tab.title);
       });
       profileSrc += template.parts[1];
       this.profile.tabs.forEach((tab: Tab, i: number, allTabs: Tab[]) => {
         profileSrc += template.tab_template
-          .replace("\${id}", 'tab' + i)
-          .replace("\${content}", tab.content);
+          .replace(new RegExp("\\$\\{id\\}", 'g'), 'tab' + i)
+          .replace(new RegExp("\\$\\{content\\}", 'g'), tab.content);
       });
       profileSrc += template.parts[2];
       return profileSrc;
