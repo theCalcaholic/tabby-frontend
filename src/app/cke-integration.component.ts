@@ -9,14 +9,17 @@ import { ProfileService } from './profile.service';
 				<ckeditor
           [(ngModel)]="tab.content"
           debounce="500"
-          [config]="{contentsCss: styleUrl}"
+          [config]="{
+            contentsCss: styleUrl,
+            font_names: 'Arial;Comic Sans MS;Courier New;Georgia;Lucida Sans Unicode;Tahoma;Times New Roman;Trebuchet MS;Verdana;Helvetica',
+            width: '755px'
+          }"
         >
         </ckeditor>
       </div>
     `,
     styles: [``],
 })
-
 export class CKEIntegrationComponent implements OnInit {
   @Input() tab: Tab;
   @Input() tabStyles : string;
@@ -25,10 +28,6 @@ export class CKEIntegrationComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
   ) {
-
-  }
-  changeStyleUrl() {
-
   }
 
   updateStyleUrl(url:string) {
