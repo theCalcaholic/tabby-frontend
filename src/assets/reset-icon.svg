@@ -19,6 +19,20 @@
   <defs
      id="defs4138">
     <marker
+       inkscape:stockid="Arrow2Mstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="marker4438"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4206"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(0.6) translate(0,0)" />
+    </marker>
+    <marker
        inkscape:stockid="Arrow2Sstart"
        orient="auto"
        refY="0.0"
@@ -308,16 +322,21 @@
      inkscape:groupmode="layer">
     <path
        sodipodi:type="spiral"
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.70000005;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker6208)"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.70002913;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:"
        id="path4684"
        sodipodi:cx="34.727272"
        sodipodi:cy="30.545454"
        sodipodi:expansion="1"
-       sodipodi:revolution="2.5127509"
-       sodipodi:radius="23.90583"
+       sodipodi:revolution="2.5443459"
+       sodipodi:radius="24.206421"
        sodipodi:argument="-18.064157"
-       sodipodi:t0="0.68743968"
-       d="m 44.583292,17.395199 c 8.291588,5.09844 10.284502,16.370118 5.19746,24.432728 C 43.897899,51.151842 31.121641,53.360786 22.018346,47.502159 11.661175,40.836573 9.236023,26.553275 15.867342,16.410075 c 0.964713,-1.475615 2.095601,-2.841836 3.363012,-4.06721"
+       sodipodi:t0="0.67890322"
+       d="m 44.583288,17.395196 c 8.29159,5.098437 10.284508,16.370115 5.197468,24.432727 C 43.897906,51.15184 31.121648,53.360788 22.018351,47.502164 11.661177,40.836581 9.2360204,26.553283 15.867337,16.41008 17.706389,13.597082 20.148531,11.192285 22.97866,9.3813117"
        transform="matrix(1.3045864,0,0,1.2777475,-10.221241,-8.1227284)" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.64712453px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
+       d="M 50.511728,15.584458 44.103368,8.5326529"
+       id="path8874"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
