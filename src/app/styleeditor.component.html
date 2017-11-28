@@ -16,6 +16,9 @@
   <ul id='attributes-container'>
     <li *ngFor="let param of selectedStyle.parameters" class='style-parameter-item'>
       <label for='param-{{param.id}}'>{{param.description}}:</label>
+      <button class='reset-button' (click)='resetParam(param.id);'>
+        <img src='/assets/reset-icon.svg' width='16px' height='16px'>
+      </button>
       <dropdown-parameter
         class='dropdown'
         *ngIf="param.type === 'dropdown'"

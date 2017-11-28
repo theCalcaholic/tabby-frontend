@@ -20,7 +20,7 @@ function cloneTo(from:Array<any>, to:Array<any>) {
   templateUrl: 'styleeditor.component.html',
   styleUrls: ['styleeditor.component.css']
 })
-export class StyleEditorComponent implements OnInit, OnChanges {
+export class StyleEditorComponent implements OnInit {
   styles: Style[];
   _selectedStyle:Style;
   bgMusicUrl:string;
@@ -42,6 +42,21 @@ export class StyleEditorComponent implements OnInit, OnChanges {
   set selectedStyle(style:Style) {
     this._selectedStyle = style;
     this.profileService.updateStyle(style);
+  }
+
+  resetParam(paramId: string): void {
+    let style;
+    styles.some((template, i) => {
+      style = new template();
+      return style.id == this._selectedStyle.id;
+    })
+    console.log("found style: " + style.id);
+    let param = style.parameters.filter(p => p.id == paramId)[0];
+    console.log("default param value is: " + param.value);
+    this._selectedStyle.parameters.forEach((param_old, i) => {
+      if( param_old.id == paramId )
+        this._selectedStyle.parameters[i] = param;
+    });
   }
 
   constructor(private profileService:ProfileService) {
@@ -92,10 +107,5 @@ export class StyleEditorComponent implements OnInit, OnChanges {
         this.bgMusicUrl = url;
       }
     ).bind(this));*/
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log("gOnChanges()");
-    console.log(changes);
   }
 }

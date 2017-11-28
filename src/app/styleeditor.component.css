@@ -19,6 +19,7 @@
 
 #attributes-container {
   list-style: none;
+  padding-left: 20px;
 }
 
 #attributes-container label {
@@ -41,6 +42,10 @@
   display: block;
   padding: 4px;
   margin: 10px;
+}
+
+.style-parameter-item > input[type="text"] {
+  width: 130px;
 }
 
 #style-editor.collapsed {
@@ -88,4 +93,12 @@ input[type='number'] {
 
 .bgmusic-url-input {
   float: right;
+}
+
+.reset-button {
+  float: right;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin-left: 4px;
 }
