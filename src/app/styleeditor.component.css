@@ -18,11 +18,13 @@
 
 #attributes-container {
   list-style: none;
-  padding-left: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #attributes-container label {
   margin-right: 1em;
+  font-size: 0.8em;
 }
 
 #bg-music-editor {
@@ -38,13 +40,41 @@
 }
 
 .style-parameter-item {
-  display: block;
+  display: inline-block;
   padding: 4px;
-  margin: 10px;
+  margin: 0;
+  /*border-top-style: dashed;
+  border-top-color: black;
+  border-top-width: 1px;*/
+
+  width: 100%;
 }
 
-.style-parameter-item > input[type="text"] {
-  width: 130px;
+.style-parameter-item.odd {
+  background-color: #d0d0dd;
+}
+
+.style-parameter-item > input[type="text"],
+.style-parameter-item > input[type="url"] {
+  height: 20px;
+  line-height: 22px;
+  box-sizing: border-box;
+  border-width: 1px;
+  border-radius: 3%;
+  border-style: solid;
+  border-color: #CCC;
+  padding: 1px;
+}
+
+.style-parameter-item > input[type="text"],
+.style-parameter-item > input[type="url"],
+.style-parameter-item > textarea {
+  width: 160px;
+}
+
+.style-parameter-item > input[type="text"]:focus,
+.style-parameter-item > input[type="url"]:focus {
+  border-color: #88AAFF
 }
 
 #style-editor.collapsed {
@@ -92,8 +122,17 @@ input[type='color'] {
   width: 20px;
   height: 20px;
   overflow: hidden;
-  border-style: none;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
   border-radius: 45%;
+  box-shadow: 0 0 0 2px black;
+}
+
+input[type='color']:hover {
+  box-shadow:
+          0 0 0 2px black,
+          0 0 2px 5px #FFAAAA;
 }
 
 .dropdown {
@@ -115,7 +154,6 @@ input[type='color'] {
   border-radius: 45%;
   background-color: #556;
   line-height: 20px;
-  margin-top: -2px;
 }
 
 .reset-button:hover {

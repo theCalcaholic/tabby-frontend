@@ -14,7 +14,7 @@
     </option>
   </select>
   <ul id='attributes-container'>
-    <li *ngFor="let param of selectedStyle.parameters" class='style-parameter-item'>
+    <li *ngFor="let param of selectedStyle.parameters; let i = index" class='style-parameter-item' [ngClass]="{ odd: i % 2}">
       <label for='param-{{param.id}}'>{{param.description}}:</label>
       <button class='reset-button' (click)='resetParam(param.id);'>
         <img src='/assets/reset-icon.svg' width='16px' height='16px'>
