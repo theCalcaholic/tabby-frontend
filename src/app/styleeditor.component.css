@@ -12,7 +12,6 @@
   padding-left: 1em;
   box-sizing: border-box;
   color: #1a1a33;
-  position: fixed;
   max-width: 80%;
   overflow: auto;
 }
@@ -87,6 +86,16 @@ input[type='number'] {
   width: 58px;
 }
 
+input[type='color'] {
+  padding: 0;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  border-style: none;
+  border-radius: 45%;
+}
+
 .dropdown {
   float: right;
 }
@@ -97,8 +106,18 @@ input[type='number'] {
 
 .reset-button {
   float: right;
-  width: 22px;
-  height: 22px;
-  padding: 0;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
   margin-left: 4px;
+  border-width: 0;
+  border-style: none;
+  border-radius: 45%;
+  background-color: #556;
+  line-height: 20px;
+  margin-top: -2px;
+}
+
+.reset-button:hover {
+  box-shadow: 0 0 2px 3px #FFAAAA;
 }
