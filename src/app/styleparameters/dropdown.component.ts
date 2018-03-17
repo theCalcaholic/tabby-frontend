@@ -4,7 +4,7 @@ import { Parameter } from '../../../../tabby-common/models/style';
 @Component({
   selector: 'dropdown-parameter',
   templateUrl: "dropdown.component.html",
-    styles: [``]
+  styleUrls: ['dropdown.component.css']
 })
 
 export class DropdownParameterComponent {

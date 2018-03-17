@@ -1,0 +1,21 @@
+/*select {
+  width: 160px;
+  height: 20px;
+  line-height: 22px;
+  box-sizing: border-box;
+  border-width: 1px;
+  border-radius: 3%;
+  border-style: solid;
+  border-color: #CCC;
+  padding: 1px;
+}
+
+select:focus {
+  border-color: #6688FF
+}*/
+
+select {
+  width: 160px;
+  height: 20px;
+  box-sizing: border-box;
+}

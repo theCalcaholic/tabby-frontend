@@ -25,6 +25,8 @@
 #attributes-container label {
   margin-right: 1em;
   font-size: 0.8em;
+  width: 140px;
+  float: left;
 }
 
 #bg-music-editor {
@@ -36,7 +38,7 @@
 }
 
 .style-parameter-input-field {
-  float:right;
+  float:left;
 }
 
 .style-parameter-item {
@@ -54,11 +56,9 @@
   background-color: #d0d0dd;
 }
 
-.style-parameter-item > input[type="text"],
-.style-parameter-item > input[type="url"] {
+.style-parameter-item input:not([type=color]) {
   height: 20px;
   line-height: 22px;
-  box-sizing: border-box;
   border-width: 1px;
   border-radius: 3%;
   border-style: solid;
@@ -66,15 +66,15 @@
   padding: 1px;
 }
 
-.style-parameter-item > input[type="text"],
-.style-parameter-item > input[type="url"],
-.style-parameter-item > textarea {
+.style-parameter-item input:not([type=color]),
+.style-parameter-item textarea {
   width: 160px;
+  box-sizing: border-box;
 }
 
 .style-parameter-item > input[type="text"]:focus,
 .style-parameter-item > input[type="url"]:focus {
-  border-color: #88AAFF
+  border-color: #6688FF
 }
 
 #style-editor.collapsed {
@@ -136,7 +136,7 @@ input[type='color']:hover {
 }
 
 .dropdown {
-  float: right;
+  float: left;
 }
 
 .bgmusic-url-input {
