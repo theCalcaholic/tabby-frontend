@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http'
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
 import { profileFromData, Profile, ProfileData } from '../../../tabby-common/models/profile';
@@ -8,45 +8,62 @@ import { Style } from '../../../tabby-common/models/style';
 import { styles } from '../../../tabby-common/styles/styles';
 
 import { environment } from '../environments/environment';
+import { Observable } from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+import {AsyncSubject} from "rxjs/AsyncSubject";
+import {Observer} from "rxjs/Observer";
 
 @Injectable()
 export class ProfileService {
+  public profileSubject: Subject<ProfileData>;
+  public musicSubject: Subject<string>;
+  public styleUrlSubject: Subject<Style>;
   private RESTBaseUrl = environment.RESTURL;
-  //private RESTBaseUrl = "/api/profiles";
-  private headers = new Headers({'Content-Type': 'application/json'});
-  private cache:Profile;
+  // private RESTBaseUrl = "/api/profiles";
+  private headers = new HttpHeaders({'Content-Type': 'application/json'});
+  private profileCache: ProfileData;
+
   private styleCallbacks = new Array<Function>();
   private musicCallbacks = new Array<Function>();
   private styleUrlCallbacks = new Array<Function>();
 
-  constructor( private http: Http)
-  {
-    console.log("RESTURL: " + this.RESTBaseUrl);
+  constructor( private http: HttpClient) {
+    console.log('RESTURL: ' + this.RESTBaseUrl);
+    this.profileSubject = new Subject<ProfileData>();
+    this.musicSubject = new Subject<string>();
+    this.styleUrlSubject = new Subject<Style>();
+    this.profileSubject.subscribe({
+      next: (profile) => {
+        console.log('profile updated.');
+        this.profileCache = profile;
+        if ( profile) {
+          this.musicSubject.next(profile.bgMusicUrl);
+        }
+      }
+    });
+    this.subscribeStyleToProfile();
+    console.log(this.profileSubject.observers);
   }
 
-  getProfile(id: string): Promise<Profile> {
-    if(typeof this.cache !== 'undefined')
-      return Promise.resolve(profileFromData(this.cache));
+  setProfileId(id: string): void {
+    if ( typeof this.profileCache !== 'undefined' && this.profileCache.id === id) {
+      return;
+    }
 
-    let url = `${this.RESTBaseUrl}/profiles/${id}`;
-    return this.http.get(url)
-      .toPromise()
-      .then(response => {
-        console.log("received response:");
-        console.log(response);
-        let profileData = response.json().data as ProfileData;
-        this.cache = profileFromData(profileData);
-        this.updateStyle();
-        this.updateBgMusic();
-        this.broadcastStyleUrl();
-        return this.cache;
-      })
-      .catch(this.handleError);
+    this.refreshProfile(id);
+  }
+
+  refreshProfile(id?: string): void {
+    const url = `${this.RESTBaseUrl}/profiles/${id}`;
+    this.http.get(url)
+        .subscribe((response: HttpResponse<ProfileData>) => {
+          this.profileSubject.next(response.body);
+        }, this.handleError);
   }
 
   saveAll(profile: ProfileData): Promise<any> {
     console.log(`ProfileService.save(${profile.id})`);
-    let promises:Promise<any>[] = new Array<Promise<any>>();
+    const promises: Promise<any>[] = new Array<Promise<any>>();
     profile.tabs.forEach((tab) => {
       promises.push(this.saveTab(tab, profile.id));
     });
@@ -54,161 +71,132 @@ export class ProfileService {
     return Promise.all(promises);
   }
 
-  newProfile(): Promise<Profile> {
-    let url = `${this.RESTBaseUrl}/profiles/new`;
-    return this.http.get(url)
-      .toPromise()
-      .then(response => {
-        console.log("received response:");
-        console.log(response);
-        let profileData = response.json().data as ProfileData;
-        this.cache = profileFromData(profileData);
-        this.updateStyle();
-        return this.cache;
-      })
-      .catch(this.handleError);
+  newProfile(): void {
+    const url = `${this.RESTBaseUrl}/profiles/new`;
+    this.http.get(url)
+      .subscribe((response: HttpResponse<ProfileData>) => {
+        console.log(`received profile:`);
+        console.log(response.body as ProfileData);
+        console.log(this.profileSubject);
+        debugger;
+        this.profileSubject.next(response.body as ProfileData);
+      }, this.handleError);
   }
 
-  newTab(tab:TabData, profileId:string): Promise<TabData> {
-    let url = `${this.RESTBaseUrl}/tabs/new`;
-    console.log("raw data: {")
-    console.log("  tab:");
+  newTab(tab: TabData, profileId: string): Observable<TabData> {
+    const url = `${this.RESTBaseUrl}/tabs/new`;
+    console.log('raw data: {');
+    console.log('  tab:');
     console.log(tab);
     console.log(`  profileId: ${profileId}`);
-    console.log("}");
-    console.log("data to transmit:");
-    console.log(JSON.stringify({ "tab": tab, "profileId": profileId }));
-    return this.http.
-      put(url, JSON.stringify({"tab": tab, "profileId": profileId}), {headers: this.headers})
-      .toPromise()
-      .then((response) => {
-        return response.json().data as TabData
+    console.log('}');
+    console.log('data to transmit:');
+    console.log(JSON.stringify({ 'tab': tab, 'profileId': profileId }));
+    const subject = new AsyncSubject<TabData>();
+    this.http.
+      put(url, JSON.stringify({'tab': tab, 'profileId': profileId}), {headers: this.headers})
+      .subscribe((response: HttpResponse<TabData>) => {
+        subject.next(response.body);
       });
+    return subject;
   }
 
   saveProfile(profile: ProfileData): Promise<Profile> {
-    let cache = this.cache;
     const url = `${this.RESTBaseUrl}/profiles/${profile.id}`;
     return this.http
-      .put(url, JSON.stringify({ "id": profile.id, "title": profile.title }), {headers: this.headers})
+      .put(url, JSON.stringify({ 'id': profile.id, 'title': profile.title }), {headers: this.headers})
       .toPromise()
       .then((response) => {
-        if( profile.id in cache)
-          delete cache[profile.id];
         return profile;
       })
       .catch(this.handleError);
   }
 
-  saveTab(tab:TabData, profileId:string): Promise<any> {
+  saveTab(tab: TabData, profileId: string): Promise<any> {
     console.log(`saveTab(<TabData>, '${profileId}')`);
-    if(typeof tab.id === 'undefined'){
-      console.log("drop save request - no id defined.");
-      return new Promise((res, rej) => {res();});
+    if (typeof tab.id === 'undefined') {
+      console.log('drop save request - no id defined.');
+      return Promise.resolve();
     }
-    let url = `${this.RESTBaseUrl}/tabs/${tab.id}`
+    const url = `${this.RESTBaseUrl}/tabs/${tab.id}`;
     return this.http.
-      put(url, JSON.stringify({"tab": tab, "profileId": profileId}), {headers: this.headers})
+      put(url, JSON.stringify({'tab': tab, 'profileId': profileId}), {headers: this.headers})
       .toPromise();
   }
 
-  deleteTab(tabId:number, profileId:string): Promise<any> {
+  deleteTab(tabId: number, profileId: string): Observable<HttpResponse<TabData>> {
     console.log(`saveTab(<TabData>, '${profileId}')`);
-    let url = `${this.RESTBaseUrl}/tabs/${tabId}`
-    return this.http.
-      put(url, JSON.stringify({"tab": null, "profileId": profileId}), {headers: this.headers})
-      .toPromise();
+    const url = `${this.RESTBaseUrl}/tabs/${tabId}`;
+    return this.http.put(
+        url,
+        JSON.stringify({'tab': null, 'profileId': profileId}), {headers: this.headers}
+        ) as Observable<HttpResponse<TabData>>;
   }
 
-  updateStyle(style?:Style) {
-    console.log("ProfileService.updateStyle()");
-    console.log("cache:");
-    console.log(this.cache);
-    if(typeof style === 'undefined') {
-      console.log('style parameter is not defined - load style from profile.')
-      console.log(this.cache);
-      if(typeof this.cache === 'undefined') {
-        return;
-      } else {
-        styles.forEach((StyleType) => {
-          let tmpStyle = new StyleType();
-          if(tmpStyle.id === this.cache.styleId) {
-            tmpStyle.loadParameters(this.cache.styleParameters);
-            style = tmpStyle;
-          }
-        });
-      }
-    } else if(typeof this.cache !== 'undefined') {
-      console.log("save style to db...");
-      const url = `${this.RESTBaseUrl}/profiles/${this.cache.id}/style`;
+  setStyle(style?: Style) {
+    console.log('ProfileService.updateStyle()');
+    console.log('cache:');
+    console.log(this.profileCache);
+    if (typeof this.profileCache !== 'undefined') {
+      console.log('save style to db...');
+      const url = `${this.RESTBaseUrl}/profiles/${this.profileCache.id}/style`;
 
-      let data = JSON.stringify({ "styleId": style.id, "styleParameters": style.parameters });
+      const data = JSON.stringify({ 'styleId': style.id, 'styleParameters': style.parameters });
       console.log(data);
+      this.http.put(url, data, {headers: this.headers}).subscribe(undefined, this.handleError);
+    }
+    this.styleUrlSubject.next(style);
+  }
+
+  setBgMusic(musicUrl: string) {
+    console.log('ProfileService.updateBgMusic()');
+    if ( typeof this.profileCache !== 'undefined' ) {
+      console.log('save bg music url to db...');
+      const url = `${this.RESTBaseUrl}/profiles/${this.profileCache.id}/background-music`;
+
+      const data = JSON.stringify({ 'bgMusicUrl': musicUrl });
       this.http.put(url, data, {headers: this.headers})
-      .toPromise().catch((error) => {
-      console.error(error.stack);
-      });
+          .subscribe(undefined, this.handleError);
     }
-    if(style) {
-      this.styleCallbacks.forEach((callback) => {
-        callback(style);
-      })
-    }
-  }
-
-  updateBgMusic(musicUrl?:string) {
-    console.log("ProfileService.updateBgMusic()");
-    if(typeof musicUrl === 'undefined') {
-      console.log("url parameter is not defined - load bg music url from profile.")
-      if(typeof this.cache === 'undefined') {
-        return;
-      } else {
-        musicUrl = this.cache.bgMusicUrl;
-      }
-    } else if( typeof this.cache !== 'undefined' ){
-      console.log("save bg music url to db...");
-      const url = `${this.RESTBaseUrl}/profiles/${this.cache.id}/background-music`;
-
-      let data = JSON.stringify({ "bgMusicUrl": musicUrl });
-      this.http.put(url, data, {headers: this.headers})
-        .toPromise().catch((error) => {
-          this.handleError(error);
-        });
-    }
-    if(musicUrl) {
-      this.musicCallbacks.forEach((callback) => {
-        callback(musicUrl);
-      })
-    }
-  }
-
-  OnStyleUpdate(callback:Function) {
-    this.styleCallbacks.push(callback)
-  }
-
-  OnMusicUpdate(callback:Function) {
-    this.musicCallbacks.push(callback);
-  }
-
-  OnStyleUrlUpdate(callback:Function) {
-    this.styleUrlCallbacks.push(callback);
+    this.musicSubject.next(musicUrl);
   }
 
   getStyleUrl() {
-    if(this.cache) {
-      return `${this.RESTBaseUrl}/profiles/${this.cache.id}/style`;
+    if (this.profileCache) {
+      return `${this.RESTBaseUrl}/profiles/${this.profileCache.id}/style`;
     }
-    return "";
+    return '';
   }
 
-  broadcastStyleUrl() {
-    console.log("broadcastStyleUrl()");
-    if(!this.cache) return;
-    let styleUrl = `${this.RESTBaseUrl}/profiles/${this.cache.id}/style`;
-    console.log("style url: " + styleUrl);
+  broadcastStyleUrl_deprec() {
+    console.log('broadcastStyleUrl()');
+    if (!this.profileCache) {
+      return;
+    }
+    const styleUrl = `${this.RESTBaseUrl}/profiles/${this.profileCache.id}/style`;
+    console.log('style url: ' + styleUrl);
 
     this.styleUrlCallbacks.forEach((cb) => {
       cb(styleUrl);
+    });
+  }
+
+  private subscribeStyleToProfile() {
+    this.profileSubject.subscribe({
+      next: (profile: ProfileData) => {
+        console.log("profile update (style observer)!");
+        if (!profile) {
+          return;
+        }
+
+        styles.forEach((StyleType) => {
+          const style = new StyleType();
+          if (style.id === profile.styleId) {
+            style.loadParameters(this.profileCache.styleParameters);
+            this.styleUrlSubject.next(style);
+          }
+        });
+      }
     });
   }
 
