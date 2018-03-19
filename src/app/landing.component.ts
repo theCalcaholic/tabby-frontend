@@ -9,7 +9,6 @@ import {Profile, ProfileData} from '../../../tabby-common/models/profile';
   selector: 'landing',
   template: `
     <div class='page-container'>
-      <register-form></register-form>
       <h1>Tabby</h1>
       <div class='create-profile-button button' (click)="createNewProfile()">Jump in!</div>
       <hr>

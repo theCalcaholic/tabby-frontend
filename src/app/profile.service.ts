@@ -78,7 +78,6 @@ export class ProfileService {
         console.log(`received profile:`);
         console.log(response.body as ProfileData);
         console.log(this.profileSubject);
-        debugger;
         this.profileSubject.next(response.body as ProfileData);
       }, this.handleError);
   }
